@@ -85,13 +85,28 @@
             </table>
         </div>    
         <div class="col-5 col-md-5">
-            <div class="row" style="padding-top: 75px;">
-                <div class="col-3 col-md-3" *ngFor="let p of podium">
-                    <img width="175" height="155" class="{{ p.class }}" src='{{ "assets/img/podium" + p.img }}'/>
-                    <hr/>
-                    <span class="lb-center">{{ p.name }}</span>
-                    <br/>
-                    <span class="lb-center">{{ p.value }}</span>
+            <div class="row">
+                <div class="col-6 col-md-6">
+                    <img width="175" height="155" class="lb-podium-yellow" src='{{ this.podium.yellow.name != "" ? "assets/img/podium/yellow/" + this.podium.yellow.name + ".png" : "" }}'/>
+                    <br/><br/>
+                    <span class="lb-center">{{ this.podium.yellow.name + " - " + this.podium.yellow.value}}</span>
+                </div>
+                <div class="col-6 col-md-6">
+                    <img width="175" height="155" class="lb-podium-polka" src='{{ this.podium.polka.name != "" ? "assets/img/podium/polka/" + this.podium.polka.name + ".png" : "" }}'/>
+                    <br/><br/>
+                    <span class="lb-center">{{ this.podium.polka.name + " - " + this.podium.polka.value }}</span>
+                </div>
+            </div>
+            <div class="row lb-first-row">
+                <div class="col-6 col-md-6">
+                    <img width="175" height="155" class="lb-podium-green" src='{{ this.podium.green.name != "" ? "assets/img/podium/green/" + this.podium.green.name + ".png" : "" }}'/>
+                    <br/><br/>
+                    <span class="lb-center">{{ this.podium.green.name + " - " + this.podium.green.value }}</span>
+                </div>
+                <div class="col-6 col-md-6">
+                    <img width="175" height="155" class="lb-podium-white" src='{{ this.podium.white.name != "" ? "assets/img/podium/white/" + this.podium.white.name + ".png" : "" }}'/>
+                    <br/><br/>
+                    <span class="lb-center">{{ this.podium.white.name + " - " + this.podium.white.value }}</span>
                 </div>
             </div>
         </div>     

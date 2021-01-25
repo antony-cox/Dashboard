@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 import { LeaderboardService } from 'app/services/leaderboard.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { Podium } from 'app/shared/model/podium';
 
 @Component({ templateUrl: 'leaderboard.component.html' })
 export class LeaderboardComponent implements OnInit {
@@ -29,7 +30,7 @@ export class LeaderboardComponent implements OnInit {
         this.chartType = 'distance';
         this.years = [];
         this.dataSource = [];
-        this.podium = [];
+        this.podium = new Podium;
         this.tableColumns = ['name', 'distance', 'time', 'speed', 'elevation', 'rides'];
         this.colors = [
             {
@@ -315,38 +316,21 @@ export class LeaderboardComponent implements OnInit {
 
     getPodium()
     {
-        this.podium = [];
         let podiumData = this.data.filter(d => d.year == this.chartYear);    
 
         if(podiumData.length > 0)
         {
-            this.podium.push({
-                img: '/yellow/' + podiumData[0].distance[0].name + '.png',
-                name: podiumData[0].distance[0].name,
-                value: podiumData[0].distance[0].value + ' km',
-                class: 'lb-podium-yellow'     
-            });
+            this.podium.yellow.name = podiumData[0].distance[0].name;
+            this.podium.yellow.value = podiumData[0].distance[0].value + ' km';
 
-            this.podium.push({
-                img: '/green/' + podiumData[0].time[0].name + '.png',
-                name: podiumData[0].time[0].name,
-                value: Math.round((podiumData[0].time[0].value / 60) * 100) / 100 + ' hours',
-                class: 'lb-podium-green' 
-            });
+            this.podium.green.name = podiumData[0].time[0].name;
+            this.podium.green.value = podiumData[0].time[0].value + ' hours';
 
-            this.podium.push({
-                img: '/polka/' + podiumData[0].elevation[0].name + '.png',
-                name: podiumData[0].elevation[0].name,
-                value: podiumData[0].elevation[0].value + ' m',
-                class: 'lb-podium-polka'   
-            });
+            this.podium.polka.name = podiumData[0].elevation[0].name;
+            this.podium.polka.value = podiumData[0].elevation[0].value + ' m';
 
-            this.podium.push({
-                img: '/white/' + podiumData[0].rides[0].name + '.png',
-                name: podiumData[0].rides[0].name,
-                value: podiumData[0].rides[0].value + ' rides',   
-                class: 'lb-podium-white'   
-            });
+            this.podium.white.name = podiumData[0].rides[0].name;
+            this.podium.white.value = podiumData[0].rides[0].value + ' rides';
         }
     }
 
