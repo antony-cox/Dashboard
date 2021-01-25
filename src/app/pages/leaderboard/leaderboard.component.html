@@ -1,0 +1,107 @@
+﻿<div id="container" class="lb-container">
+    <div class="row lb-first-row lb-center">
+        <div class="col-3 col-md-3"></div>
+        <div class="col-6 col-md-6">
+            <p class="lb-title">STRAVA LEADERBOARD</p>
+        </div>
+        <div class="col-3 col-md-3" style="text-align: right;">
+            <div style="margin-right: 25px;">
+                <button [disabled]="this.refreshed" class="btn" style="height: 35px; margin-top: 0;" (click)="refresh()">
+                    <i class="fas fa-refresh"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row lb-row lb-center">
+        <div class="col-1 col-md-1"></div>  
+        <div class="col-10 col-md-10">
+            <div class="row">
+                <div class="col-6 col-md-6">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Year</mat-label>
+                        <mat-select [(value)]="chartYear" placeholder="year" (selectionChange)="onYearChange($event.value)">
+                          <mat-option *ngFor="let year of years" [value]="year">
+                            {{year}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </div>   
+                <div class="col-6 col-md-6">
+                    <mat-button-toggle-group name="chartType">
+                        <mat-button-toggle value="distance" (change)="onTypeChange($event.value)">Distance</mat-button-toggle>
+                        <mat-button-toggle value="time" (change)="onTypeChange($event.value)">Time</mat-button-toggle>
+                        <mat-button-toggle value="elevation" (change)="onTypeChange($event.value)">Elevation</mat-button-toggle>
+                        <mat-button-toggle value="rides" (change)="onTypeChange($event.value)">Rides</mat-button-toggle>
+                    </mat-button-toggle-group>
+                </div>   
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-12">
+                    <canvas id="chart" height="50" width="250"></canvas> 
+                </div>     
+            </div>
+        </div>
+        <div class="col-1 col-md-1"></div>  
+    </div>
+    <div class="row lb-row lb-center">
+        <div class="col-1 col-md-1"></div>   
+        <div class="col-5 col-md-5">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="lb-table">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef class="lb-left"> Name </th>
+                    <td mat-cell *matCellDef="let element" class="lb-left lb-table-name"> 
+                        <span (mouseover)="showImg($event, true)" (mouseout)="showImg($event, false)">{{element.name}}</span>
+                        <img width="175" height="155" id="img-{{element.name}}" class="lb-table-img" src="{{this.tableImgPath + element.name + '.png'}}"/>
+                    </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="distance">
+                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Distance (km) </th>
+                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.distance}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="time">
+                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Time (h) </th>
+                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.time}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="speed">
+                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Avg Speed (kmh) </th>
+                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.speed}} </td>
+                </ng-container>
+              
+                <ng-container matColumnDef="elevation">
+                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Elevation (m) </th>
+                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.elevation}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rides">
+                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Rides </th>
+                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.rides}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: tableColumns;"></tr>
+            </table>
+        </div>    
+        <div class="col-5 col-md-5">
+            <div class="row" style="padding-top: 75px;">
+                <div class="col-3 col-md-3" *ngFor="let p of podium">
+                    <img width="175" height="155" class="{{ p.class }}" src='{{ "assets/img/podium" + p.img }}'/>
+                    <hr/>
+                    <span class="lb-center">{{ p.name }}</span>
+                    <br/>
+                    <span class="lb-center">{{ p.value }}</span>
+                </div>
+            </div>
+        </div>     
+        <div class="col-1 col-md-1"></div>    
+    </div>
+</div>
+<div *ngIf="this.loading" class="loader-container">
+    <div class="loader">
+        <div style="margin: 0 auto;" >
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        </div>
+    </div>
+</div>
