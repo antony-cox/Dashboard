@@ -282,16 +282,16 @@ export class LeaderboardComponent implements OnInit {
         switch(this.chartType)
         {
             case 'distance':
-                this.dataSource.sort((a,b) => a.distance > b.distance ? -1 : b.distance > a.distance ? 1 : 0);
+                this.dataSource.sort((a,b) => a.distance > b.distance ? -1 : b.distance > a.distance ? 1 : a.name > b.name ? 1 : b.name > a.name ? -1 : 0);
                 break;
             case 'time':
-                this.dataSource.sort((a,b) => a.time > b.time ? -1 : b.time > a.time ? 1 : 0);
+                this.dataSource.sort((a,b) => a.time > b.time ? -1 : b.time > a.time ? 1 : a.name > b.name ? 1 : b.name > a.name ? -1 : 0);
                 break;
             case 'elevation':
-                this.dataSource.sort((a,b) => a.elevation > b.elevation ? -1 : b.elevation > a.elevation ? 1 : 0);
+                this.dataSource.sort((a,b) => a.elevation > b.elevation ? -1 : b.elevation > a.elevation ? 1 : a.name > b.name ? 1 : b.name > a.name ? -1 : 0);
                 break;
             case 'rides':
-                this.dataSource.sort((a,b) => a.rides > b.rides ? -1 : b.rides > a.rides ? 1 : 0);
+                this.dataSource.sort((a,b) => a.rides > b.rides ? -1 : b.rides > a.rides ? 1 : a.name > b.name ? 1 : b.name > a.name ? -1 : 0);
                 break;
         }
     }
@@ -321,16 +321,16 @@ export class LeaderboardComponent implements OnInit {
         if(podiumData.length > 0)
         {
             this.podium.yellow.name = podiumData[0].distance[0].name;
-            this.podium.yellow.value = podiumData[0].distance[0].value + ' km';
+            this.podium.yellow.value = podiumData[0].distance[0].value;
 
             this.podium.green.name = podiumData[0].time[0].name;
-            this.podium.green.value = podiumData[0].time[0].value + ' hours';
+            this.podium.green.value = Math.round((podiumData[0].time[0].value / 60) * 100) / 100;
 
             this.podium.polka.name = podiumData[0].elevation[0].name;
-            this.podium.polka.value = podiumData[0].elevation[0].value + ' m';
+            this.podium.polka.value = podiumData[0].elevation[0].value;
 
             this.podium.white.name = podiumData[0].rides[0].name;
-            this.podium.white.value = podiumData[0].rides[0].value + ' rides';
+            this.podium.white.value = podiumData[0].rides[0].value;
         }
     }
 
@@ -342,6 +342,7 @@ export class LeaderboardComponent implements OnInit {
         .pipe(first())
         .subscribe(lb => {
             this.data = lb;
+            this.years = [];
             this.data.forEach(d => {
                 this.years.push(d.year);
             });

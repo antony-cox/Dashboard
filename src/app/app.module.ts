@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from "ngx-toastr";
@@ -23,6 +23,10 @@ import { MatTableModule } from "@angular/material/table";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+
+import localFr from '@angular/common/locales/fr';
+import { registerLocaleData } from "@angular/common";
+registerLocaleData(localFr);
 
 
 @NgModule({
@@ -52,7 +56,8 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: LOCALE_ID, useValue: 'fr-FR'},
   ],
   bootstrap: [AppComponent]
 })

@@ -49,35 +49,35 @@
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" class="lb-table">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef class="lb-left"> Name </th>
-                    <td mat-cell *matCellDef="let element" class="lb-left lb-table-name"> 
+                    <td mat-cell *matCellDef="let element; let i = index" class="lb-left lb-table-name"> 
                         <span (mouseover)="showImg($event, true)" (mouseout)="showImg($event, false)">{{element.name}}</span>
                         <img width="175" height="155" id="img-{{element.name}}" class="lb-table-img" src="{{this.tableImgPath + element.name + '.png'}}"/>
                     </td>
                 </ng-container>
               
                 <ng-container matColumnDef="distance">
-                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Distance (km) </th>
-                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.distance}} </td>
+                    <th mat-header-cell *matHeaderCellDef class="lb-right">Distance (km)</th>
+                    <td mat-cell *matCellDef="let element" class="lb-right">{{element.distance | number: '1.2-2':'fr-FR'}}</td>
                 </ng-container>
               
                 <ng-container matColumnDef="time">
-                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Time (h) </th>
-                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.time}} </td>
+                    <th mat-header-cell *matHeaderCellDef class="lb-right">Time (h)</th>
+                    <td mat-cell *matCellDef="let element" class="lb-right">{{element.time | number: '1.2-2':'fr-FR'}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="speed">
-                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Avg Speed (kmh) </th>
-                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.speed}} </td>
+                    <th mat-header-cell *matHeaderCellDef class="lb-right">Avg Speed (kmh)</th>
+                    <td mat-cell *matCellDef="let element" class="lb-right">{{element.speed | number: '1.2-2':'fr-FR'}}</td>
                 </ng-container>
               
                 <ng-container matColumnDef="elevation">
-                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Elevation (m) </th>
-                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.elevation}} </td>
+                    <th mat-header-cell *matHeaderCellDef class="lb-right">Elevation (m)</th>
+                    <td mat-cell *matCellDef="let element" class="lb-right">{{element.elevation}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="rides">
-                    <th mat-header-cell *matHeaderCellDef class="lb-center"> Rides </th>
-                    <td mat-cell *matCellDef="let element" class="lb-center"> {{element.rides}} </td>
+                    <th mat-header-cell *matHeaderCellDef class="lb-right">Rides</th>
+                    <td mat-cell *matCellDef="let element" class="lb-right">{{element.rides}}</td>
                 </ng-container>
 
                 <tr mat-header-row *matHeaderRowDef="tableColumns"></tr>
@@ -86,27 +86,31 @@
         </div>    
         <div class="col-5 col-md-5">
             <div class="row">
-                <div class="col-6 col-md-6">
-                    <img width="175" height="155" class="lb-podium-yellow" src='{{ this.podium.yellow.name != "" ? "assets/img/podium/yellow/" + this.podium.yellow.name + ".png" : "" }}'/>
+                <div class="col-6 col-md-6" *ngIf="this.podium.yellow.name != ''">
+                    <img width="175" height="155" class="lb-podium-yellow" 
+                        src='{{ this.podium.yellow.name != "" ? "assets/img/podium/yellow/" + this.podium.yellow.name + ".png" : "" }}'/>
                     <br/><br/>
-                    <span class="lb-center">{{ this.podium.yellow.name + " - " + this.podium.yellow.value}}</span>
+                    <span class="lb-center">{{ this.podium.yellow.name }} - {{ this.podium.yellow.value | number: '1.2-2':'fr-FR'}} km</span>
                 </div>
-                <div class="col-6 col-md-6">
-                    <img width="175" height="155" class="lb-podium-polka" src='{{ this.podium.polka.name != "" ? "assets/img/podium/polka/" + this.podium.polka.name + ".png" : "" }}'/>
+                <div class="col-6 col-md-6" *ngIf="this.podium.polka.name != ''">
+                    <img width="175" height="155" class="lb-podium-polka" 
+                        src='{{ this.podium.polka.name != "" ? "assets/img/podium/polka/" + this.podium.polka.name + ".png" : "" }}'/>
                     <br/><br/>
-                    <span class="lb-center">{{ this.podium.polka.name + " - " + this.podium.polka.value }}</span>
+                    <span class="lb-center">{{ this.podium.polka.name }} - {{ this.podium.polka.value | number: '1.0-0':'fr-FR'}} m</span>
                 </div>
             </div>
             <div class="row lb-first-row">
-                <div class="col-6 col-md-6">
-                    <img width="175" height="155" class="lb-podium-green" src='{{ this.podium.green.name != "" ? "assets/img/podium/green/" + this.podium.green.name + ".png" : "" }}'/>
+                <div class="col-6 col-md-6" *ngIf="this.podium.green.name != ''">
+                    <img width="175" height="155" class="lb-podium-green" 
+                        src='{{ this.podium.green.name != "" ? "assets/img/podium/green/" + this.podium.green.name + ".png" : "" }}'/>
                     <br/><br/>
-                    <span class="lb-center">{{ this.podium.green.name + " - " + this.podium.green.value }}</span>
+                    <span class="lb-center">{{ this.podium.green.name }} - {{ this.podium.green.value | number: '1.2-2':'fr-FR'}} hours</span>
                 </div>
-                <div class="col-6 col-md-6">
-                    <img width="175" height="155" class="lb-podium-white" src='{{ this.podium.white.name != "" ? "assets/img/podium/white/" + this.podium.white.name + ".png" : "" }}'/>
+                <div class="col-6 col-md-6" *ngIf="this.podium.white.name != ''">
+                    <img width="175" height="155" class="lb-podium-white" 
+                        src='{{ this.podium.white.name != "" ? "assets/img/podium/white/" + this.podium.white.name + ".png" : "" }}'/>
                     <br/><br/>
-                    <span class="lb-center">{{ this.podium.white.name + " - " + this.podium.white.value }}</span>
+                    <span class="lb-center">{{ this.podium.white.name + " - " + this.podium.white.value }} rides</span>
                 </div>
             </div>
         </div>     

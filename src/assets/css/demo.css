@@ -229,6 +229,10 @@
   text-align: left;
 }
 
+.lb-right {
+  text-align: right !important;
+}
+
 .lb-first-row
 {
   padding-top: 20px;
@@ -310,14 +314,19 @@
   color: white;
 }
 
+.mat-table .mat-column-icon {
+  flex: 0 0 7% !important;
+  width: 7% !important;
+}
+
 .mat-table .mat-column-name {
-  flex: 0 0 35% !important;
-  width: 35% !important;
+  flex: 0 0 27% !important;
+  width: 27% !important;
 }
 
 .mat-table .mat-column-distance {
-  flex: 0 0 13% !important;
-  width: 13% !important;
+  flex: 0 0 11% !important;
+  width: 11% !important;
 }
 
 .mat-table .mat-column-time {
@@ -326,16 +335,16 @@
 }
 
 .mat-table .mat-column-speed {
-  flex: 0 0 13% !important;
-  width: 13% !important;
+  flex: 0 0 16% !important;
+  width: 16% !important;
 }
 
 .mat-table .mat-column-elevation {
-  flex: 0 0 13% !important;
-  width: 13% !important;
+  flex: 0 0 14% !important;
+  width: 14% !important;
 }
 
 .mat-table .mat-column-rides {
-  flex: 0 0 13% !important;
-  width: 13% !important;
+  flex: 0 0 12% !important;
+  width: 12% !important;
 }
