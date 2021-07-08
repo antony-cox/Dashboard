@@ -348,3 +348,7 @@
   flex: 0 0 12% !important;
   width: 12% !important;
 }
+
+.pointer {
+  cursor: pointer;
+}

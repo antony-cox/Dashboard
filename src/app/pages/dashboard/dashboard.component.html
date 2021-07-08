@@ -1,63 +1,65 @@
-<div class="row">
-  <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="user.permissions.includes('WEIGHT') && weights">
-    <div class="card card-stats">
-      <div class="card-body ">
-        <div class="row">
-          <div class="col-5 col-md-4">
-            <i class="fas fa-weight fa-3x" style="color: #51cbce"></i>
+<div class="row" *ngIf="user.permissions.includes('WEIGHT') && weights">
+  <div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6" *ngIf="weights">
+      <div class="card card-stats">
+        <div class="card-body ">
+          <div class="row">
+            <div class="col-5 col-md-4">
+              <i class="fas fa-weight fa-3x" style="color: #51cbce"></i>
+            </div>
+            <div class="col-7 col-md-8">
+              <p class="card-title numbers">WeightTracker</p>  
+            </div>
           </div>
-          <div class="col-7 col-md-8">
-            <p class="card-title numbers">WeightTracker</p>  
+          <hr style="margin: 5px 0 10px 0;">
+          <div class="row">
+            <div class="col-6 col-md-6">
+              <div class="row">
+                <div class="col">
+                  <label for="weight" style="font-size: 16px;">New Weight</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-6 col-md-6" style="padding: 0px 5px 0px 15px;">
+                  <input type="number" [formControl]="weight" class="form-control" style="height: 35px;" [ngClass]="{'input-invalid' : weight.invalid}" required/>
+                </div>
+                <div class="col-6 col-md-6" style="padding: 0px 5px 0px 5px;">
+                  <button class="btn btn-primary" style="height: 35px; margin-top: 0;" (click)="addWeight()">+</button>  
+                </div>
+              </div>
+            </div>
+            <div class="col-6 col-md-6" *ngIf="weights.length > 0">
+              <div class="numbers">
+                <p class="card-category">Last Weight</p>
+                <p class="card-title">{{ weights[weights.length-1].weight }} KG<p>
+              </div>
+            </div>
           </div>
         </div>
-        <hr style="margin: 5px 0 10px 0;">
-        <div class="row">
-          <div class="col-6 col-md-6">
-            <div class="row">
-              <div class="col">
-                <label for="weight" style="font-size: 16px;">New Weight</label>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6 col-md-6" style="padding: 0px 5px 0px 15px;">
-                <input type="number" [formControl]="weight" class="form-control" style="height: 35px;" [ngClass]="{'input-invalid' : weight.invalid}" required/>
-              </div>
-              <div class="col-6 col-md-6" style="padding: 0px 5px 0px 5px;">
-                <button class="btn btn-primary" style="height: 35px; margin-top: 0;" (click)="addWeight()">+</button>  
-              </div>
-            </div>
+        <!-- <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-refresh"></i> Update Now
           </div>
-          <div class="col-6 col-md-6" *ngIf="weights.length > 0">
-            <div class="numbers">
-              <p class="card-category">Last Weight</p>
-              <p class="card-title">{{ weights[weights.length-1].weight }} KG<p>
-            </div>
-          </div>
-        </div>
+        </div> -->
       </div>
-      <!-- <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-refresh"></i> Update Now
-        </div>
-      </div> -->
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-    <div class="card ">
-      <div class="card-header ">
-        <h5 class="card-title">Weight Graph</h5>
-      </div>
-      <div class="card-body">
-        <div *ngIf="weights.length == 0">Add your weight to see a graph of your evolution here.</div>
-        <canvas id="chartWeight" width="400" height="100"></canvas>
-      </div>
-      <div class="card-footer ">
-        <hr>
-        <div class="stats">
-          <i class="fa fa-history"></i> Updated 3 minutes ago
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card ">
+        <div class="card-header ">
+          <h5 class="card-title">Weight Graph</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="weights.length == 0">Add your weight to see a graph of your evolution here.</div>
+          <canvas id="chartWeight" width="400" height="100"></canvas>
+        </div>
+        <div class="card-footer ">
+          <hr>
+          <div class="stats">
+            <i class="fa fa-history"></i> Updated 3 minutes ago
+          </div>
         </div>
       </div>
     </div>

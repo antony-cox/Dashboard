@@ -13,11 +13,12 @@ export interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
     { path: '/dashboard',     title: 'Dashboard',         icon:'fas fa-home',           class: '',  permission: '' },
-    { path: '/weight',        title: 'WeightTracker',     icon:'fas fa-weight',         class: '',  permission: '' },
-    { path: '/strava',        title: 'Strava',            icon:'fab fa-strava',         class: '',  permission: '' },
-    { path: '/calendar',      title: 'Calendar',          icon:'far fa-calendar',       class: '',  permission: '' },
+    { path: '/weight',        title: 'WeightTracker',     icon:'fas fa-weight',         class: '',  permission: 'WEIGHT' },
+    { path: '/strava',        title: 'Strava',            icon:'fab fa-strava',         class: '',  permission: 'STRAVA' },
+    { path: '/calendar',      title: 'Calendar',          icon:'far fa-calendar',       class: '',  permission: 'CALENDAR' },
+    { path: '/workout',       title: 'Workouts',          icon:'fas fa-dumbbell',          class: '',  permission: 'WORKOUT' },
     { path: '/user',          title: 'User Profile',      icon:'fas fa-user',           class: '',  permission: '' },
-    { path: '/usermgmt',      title: 'User Management',   icon:'fas fa-users',          class: '',  permission: 'SUPERADMIN' }
+    { path: '/usermgmt',      title: 'User Management',   icon:'fas fa-users',          class: '',  permission: 'SUPERADMIN' },
 ];
 
 @Component({

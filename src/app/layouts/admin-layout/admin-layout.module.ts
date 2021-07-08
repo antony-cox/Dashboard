@@ -21,6 +21,8 @@ import { StravaComponent } from 'app/pages/strava/strava.component';
 import { CalendarComponent } from 'app/pages/calendar/calendar.component';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { WorkoutComponent } from 'app/pages/workout/workout.component';
+import { WorkoutDetailComponent } from 'app/pages/workoutDetail/workoutDetail.component';
 
 @NgModule({
   imports: [
@@ -47,7 +49,9 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     UsermgmtComponent,
     WeightComponent,
     StravaComponent,
-    CalendarComponent
+    CalendarComponent,
+    WorkoutComponent,
+    WorkoutDetailComponent,
   ]
 })
 

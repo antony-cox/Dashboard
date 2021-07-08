@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-3" id="searchCard">
+    <div class="card card-search-workouts" style="position: sticky; top: 0;">
+      <div class="card-header">
+        <h2 class="card-title">Search workouts</h2>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="workoutSearchForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-12 pr-3">
+              <div class="form-group">
+                <label>Name:</label>
+                <input type="text" class="form-control" placeholder="Workout name" formControlName="name">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 pr-3">
+              <label>Categories:</label>
+              <label formArrayName="categories" *ngFor="let cat of categories; let i = index;" class="form-control" style="border: none !important;">
+                <input type="checkbox" [formControlName]="i">
+                {{cat}}
+              </label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 pr-3">
+              <div class="update ml-auto mr-auto">
+                <button type="submit" class="btn btn-primary">Search</button>
+              </div>
+            </div>
+            <div class="col-md-8 pr-3" style="text-align: right;">
+                <button type="button" class="btn btn-primary" (click)="movePage(-1)"><i class="fas fa-angle-left"></i></button>
+                <span style="font-size: 20px;">  {{ page }}  </span>
+                <button type="button" class="btn btn-primary" (click)="movePage(1)"><i class="fas fa-angle-right"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="card card-search-workouts" *ngFor="let w of workouts; let i = index;">
+      <div class="card-header">
+        <h2 class="card-title">
+          <a [routerLink]="['/workout', w._id]">{{ w.name }}</a>
+        </h2>
+      </div>
+      <div class="card-body">
+        <span *ngIf="w.category != ''">Category: {{ w.category }} - </span>
+        <span *ngIf="w.duration > 0">Duration: {{ w.duration / 60 }} mins - </span>
+        <span *ngIf="w.tss > 0">TSS: {{ w.tss }}</span>
+        <br/>
+        <br/>
+        <h3>Description</h3>
+        <p>{{ w.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

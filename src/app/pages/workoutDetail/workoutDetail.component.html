@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-workout">
+      <div class="card-header">
+        <h2 class="card-title">
+          {{ workout.name }}
+        </h2>
+      </div>
+      <div class="card-body">
+        <span *ngIf="workout.category != ''">Category: {{ workout.category }} - </span>
+        <span *ngIf="workout.duration > 0">Duration: {{ workout.duration / 60 }} mins - </span>
+        <span *ngIf="workout.tss > 0">TSS: {{ workout.tss }}</span>
+        <br/>
+        <br/>
+        <h3>Description</h3>
+        <p>{{ workout.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
