@@ -1,10 +1,15 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card card-workout">
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="chartWorkout" width="400" height="100"></canvas>
+        </div>
+      </div>
       <div class="card-header">
-        <h2 class="card-title">
+        <h1 class="card-title">
           {{ workout.name }}
-        </h2>
+        </h1>
       </div>
       <div class="card-body">
         <span *ngIf="workout.category != ''">Category: {{ workout.category }} - </span>
@@ -12,8 +17,10 @@
         <span *ngIf="workout.tss > 0">TSS: {{ workout.tss }}</span>
         <br/>
         <br/>
-        <h3>Description</h3>
-        <p>{{ workout.description }}</p>
+        <h2>Description</h2>
+        <p style="white-space: pre-line">{{ workout.description }}</p>
+        <h2>Goals</h2>
+        <p style="white-space: pre-line">{{ workout.goals }}</p>
       </div>
     </div>
   </div>
