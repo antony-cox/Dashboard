@@ -7,8 +7,11 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
-import Chart from 'chart.js';
-import { formatDate } from '@angular/common';
+import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import { FtpService } from "app/services/ftp.service";
+import { Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'workoutDetail-cmp',
@@ -25,13 +28,19 @@ export class WorkoutDetailComponent implements OnInit{
     public ctx;
     public chart;
     public chartColor;
+    public ftp;
+
+    subscription: Subscription;
+
 
     constructor(
         private authService: AuthenticationService,
         private workoutService: WorkoutService,
         private toastr: ToastrService,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private ftpService: FtpService
     ) {
+        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin);
         this.user = authService.currentUserValue;
         this.id = this.activatedRoute.snapshot.paramMap.get("id");
         this.getWorkout();
@@ -39,6 +48,14 @@ export class WorkoutDetailComponent implements OnInit{
 
     ngOnInit() {
       this.workout = new Workout();
+      this.subscription = this.ftpService.currentFtp.subscribe(ftp => {
+        this.ftp = ftp;
+        if(this.workout.data != undefined) { this.updateChart(); }
+      });
+    }
+
+    ngOnDestroy() {
+      this.subscription.unsubscribe();    
     }
 
     getWorkout()
@@ -58,83 +75,76 @@ export class WorkoutDetailComponent implements OnInit{
       }
     }
 
+    updateChart()
+    {
+      let chartData = [];
+
+      this.workout.data.forEach(d => {
+        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.ftp });
+        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.ftp });
+      })
+
+      this.chart.data.datasets[0].data = chartData;
+      this.chart.options.scales.y.suggestedMax = 1.2 * this.ftp;
+      this.chart.options.plugins.annotation.annotations.line1.yMin = this.ftp;
+      this.chart.options.plugins.annotation.annotations.line1.yMax = this.ftp;
+      this.chart.update();
+    }
+
     workoutChart()
     {
-      this.chartColor = "#FFFFFF";
-
       this.canvas = document.getElementById("chartWorkout");
       this.ctx = this.canvas.getContext("2d");
 
       let chartData = [];
+      let backgroundGradient =  this.ctx.createLinearGradient(0, 0, 0, 600);
+      backgroundGradient.addColorStop(0, 'rgba(81,203,206,1)');   
+      backgroundGradient.addColorStop(1, 'rgba(9,9,121,1)');
+
       
       this.workout.data.forEach(d => {
-        chartData.push({x: d.startTime/60, y: d.startPower});
-        chartData.push({x: d.endTime/60, y: d.endPower});
+        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.ftp });
+        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.ftp });
       })
-
-      console.log(chartData);
 
       this.chart = new Chart(this.ctx, {
         type: 'scatter',
 
         data: {
           datasets: [{
-              label: this.workout.name,
-              data: chartData,
-              showLine: true,
-              lineTension: 0,
-              borderColor: '#007bff',
-              backgroundColor: '#5eacff',
-              radius: 0
-            }
-          ]
+            label: this.workout.name,
+            data: chartData,
+            borderColor: 'rgba(9,9,121,1)',
+            borderWidth: 2,
+            backgroundColor: backgroundGradient,
+            pointRadius: 0,
+            showLine: true,
+            fill: 'origin',
+          }]
         },
         options: {
-          legend: {
-            display: false
-          },
-
-          tooltips: {
-            enabled: true,
-            mode: 'nearest',
-            intersect: false
-          },
-
-          hover: {
-            mode: 'nearest',
-            intersect: false
-          },
-
           scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: "#9f9f9f",
-                beginAtZero: true,
-                maxTicksLimit: 5,
-                //padding: 20
-              },
-              gridLines: {
-                drawBorder: true,
-                color: 'rgba(0,0,0,0.1)',
-                zeroLineColor: "rgba(0,0,0,0.4)",
-                display: true
-              }
-            }],
-
-            xAxes: [{
-              barPercentage: 1.6,
-              gridLines: {
-                drawBorder: true,
-                color: 'rgba(0,0,0,0.1)',
-                zeroLineColor: "rgba(0,0,0,0.4)",
-                display: true
-              },
-              ticks: {
-                padding: 20,
-                fontColor: "#9f9f9f"
-              }
-            }]
+            x: {
+              max: chartData[chartData.length - 1].x
+            },
+            y: {
+              min: 0,
+              suggestedMax: 1.2 * this.ftp
+            }
           },
+          plugins: {
+            annotation: {
+              annotations: {
+                line1: {
+                  type: 'line',
+                  yMin: this.ftp,
+                  yMax: this.ftp,
+                  borderColor: 'rgb(255, 99, 132)',
+                  borderWidth: 1,
+                }
+              }
+            }
+          }
         }
       });
     }

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { Location} from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
+import { FormBuilder, Validators } from '@angular/forms';
+import { FtpService } from "../../services/ftp.service";
 
 @Component({
     moduleId: module.id,
@@ -17,11 +19,24 @@ export class NavbarComponent implements OnInit{
     private nativeElement: Node;
     private toggleButton;
     private sidebarVisible: boolean;
+    private ftp: number;
+    private editFtp = false;
 
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
 
-    constructor(location:Location, private renderer : Renderer2, private element : ElementRef, private router: Router, private authSerivce: AuthenticationService) {
+    ftpForm = this.formBuilder.group({
+      ftp: ['', Validators.required]
+    }); 
+
+    constructor(
+      location:Location, 
+      private renderer : Renderer2, 
+      private element : ElementRef, 
+      private router: Router, 
+      private authSerivce: AuthenticationService,
+      private formBuilder: FormBuilder,
+      private ftpService: FtpService) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
@@ -34,6 +49,8 @@ export class NavbarComponent implements OnInit{
         this.router.events.subscribe((event) => {
           this.sidebarClose();
        });
+
+       this.ftp = localStorage.getItem('ftp') != undefined && localStorage.getItem('ftp') != '' ? parseInt(localStorage.getItem('ftp')) : 100;
     }
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -99,4 +116,21 @@ export class NavbarComponent implements OnInit{
         this.router.navigate(['/login']);
       }
 
+      setFtp()
+      {
+        this.editFtp = true;
+      }
+
+      saveFtp()
+      {
+        if(this.ftpForm.valid)
+        {
+          let newFtp = this.ftpForm.controls['ftp'].value;
+          console.log(newFtp);
+          localStorage.setItem('ftp', newFtp);
+          this.ftpService.setFtp(newFtp);
+          this.ftp = newFtp;
+          this.editFtp = false;
+        }
+      }
 }

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
-import Chart from 'chart.js';
+import { Chart } from 'chart.js';
 import { formatDate } from '@angular/common';
 
 @Component({

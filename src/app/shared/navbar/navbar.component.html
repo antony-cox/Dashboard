@@ -9,7 +9,13 @@
           <span class="navbar-toggler-bar bar3"></span>
         </button>
       </div>
-      <a class="navbar-brand" href="javascript:void(0)">{{getTitle()}}</a>
+      <span *ngIf="!editFtp" (click)="setFtp()" class="navbar-brand">{{ this.ftp }}  <i class="fas fa-bolt"></i></span>
+      <span *ngIf="editFtp" class="navbar-brand">
+        <form [formGroup]="ftpForm">
+          <input type="text" class="form-control" style="display: inline-block; width: 100px; margin-right: 10px;" placeholder="FTP" formControlName="ftp">
+          <i (click)="saveFtp()" style="color: #51cbce;" class="fas fa-check"></i>
+        </form>   
+      </span>
     </div>
     <button class="navbar-toggler" type="button" (click)="collapse()"
       [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">

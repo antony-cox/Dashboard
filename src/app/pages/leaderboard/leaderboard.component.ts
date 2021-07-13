@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-import Chart from 'chart.js';
+import { Chart, BarController, LinearScale, LineElement, PointElement, Filler, CategoryScale, BarElement, Tooltip } from 'chart.js';
 import { LeaderboardService } from 'app/services/leaderboard.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
@@ -23,7 +23,9 @@ export class LeaderboardComponent implements OnInit {
     refreshed;
     tableImgPath;
 
-    constructor(private leaderboardService: LeaderboardService, private router: Router) {}
+    constructor(private leaderboardService: LeaderboardService, private router: Router) {
+        Chart.register(BarController, LinearScale, LineElement, PointElement, Filler, CategoryScale, BarElement, Tooltip);
+    }
 
     ngOnInit() {
         this.refreshed = false;
@@ -122,7 +124,7 @@ export class LeaderboardComponent implements OnInit {
         var chartData = this.getChartData();
 
         this.chart = new Chart(this.ctx, {
-            type: 'horizontalBar',
+            type: 'bar',
             data: {
                 labels: chartData.labels,
                 datasets: [{
@@ -133,23 +135,15 @@ export class LeaderboardComponent implements OnInit {
                 }
             ]},
             options: {
+                indexAxis: 'y',
                 scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            fontColor: "#fff"
-                        }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            fontColor: "#fff"
-                        }
-                    }]
-                },
-                legend: {
-                    display: false
-                },
-                
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                        beginAtZero: true
+                    }
+                }
             }
         });
     }

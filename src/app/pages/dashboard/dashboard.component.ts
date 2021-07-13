@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Chart from 'chart.js';
+import { Chart } from 'chart.js';
 import { first } from 'rxjs/operators';
 import { formatDate } from '@angular/common';
 
@@ -84,80 +84,80 @@ export class DashboardComponent implements OnInit{
 
     weightChart()
     {
-      this.chartColor = "#FFFFFF";
+      // this.chartColor = "#FFFFFF";
 
-      this.canvas = document.getElementById("chartWeight");
-      this.ctx = this.canvas.getContext("2d");
+      // this.canvas = document.getElementById("chartWeight");
+      // this.ctx = this.canvas.getContext("2d");
 
-      var weightLabels = [];
-      var weightData = [];
+      // var weightLabels = [];
+      // var weightData = [];
 
-      for(var i = this.weights.length;i--;i==0)
-      {
-        weightData.push(this.weights[i].weight);
-        weightLabels.push(formatDate(this.weights[i].date, 'dd/MM/yyyy', 'en-US'));
-      }
+      // for(var i = this.weights.length;i--;i==0)
+      // {
+      //   weightData.push(this.weights[i].weight);
+      //   weightLabels.push(formatDate(this.weights[i].date, 'dd/MM/yyyy', 'en-US'));
+      // }
 
-      this.chartWeight = new Chart(this.ctx, {
-        type: 'line',
+      // this.chartWeight = new Chart(this.ctx, {
+      //   type: 'line',
 
-        data: {
-          labels: weightLabels.reverse(),
-          datasets: [{
-              label: 'Weight',
-              borderColor: "#6bd098",
-              backgroundColor: "#34b5b8",
-              pointRadius: 5,
-              pointHoverRadius: 5,
-              pointBackgroundColor: "#6bd098",
-              pointBorderColor: "#6bd098",
-              borderWidth: 3,
-              data: weightData.reverse(),
-              lineTension: 0.4
-            }
-          ]
-        },
-        options: {
-          legend: {
-            display: false
-          },
+      //   data: {
+      //     labels: weightLabels.reverse(),
+      //     datasets: [{
+      //         label: 'Weight',
+      //         borderColor: "#6bd098",
+      //         backgroundColor: "#34b5b8",
+      //         pointRadius: 5,
+      //         pointHoverRadius: 5,
+      //         pointBackgroundColor: "#6bd098",
+      //         pointBorderColor: "#6bd098",
+      //         borderWidth: 3,
+      //         data: weightData.reverse(),
+      //         lineTension: 0.4
+      //       }
+      //     ]
+      //   },
+      //   options: {
+      //     legend: {
+      //       display: false
+      //     },
 
-          tooltips: {
-            enabled: true
-          },
+      //     tooltips: {
+      //       enabled: true
+      //     },
 
-          scales: {
-            yAxes: [{
-              ticks: {
-                fontColor: "#9f9f9f",
-                beginAtZero: false,
-                maxTicksLimit: 5,
-                //padding: 20
-              },
-              gridLines: {
-                drawBorder: true,
-                color: 'rgba(0,0,0,0.1)',
-                zeroLineColor: "rgba(0,0,0,0.4)",
-                display: true
-              }
-            }],
+      //     scales: {
+      //       yAxes: [{
+      //         ticks: {
+      //           fontColor: "#9f9f9f",
+      //           beginAtZero: false,
+      //           maxTicksLimit: 5,
+      //           //padding: 20
+      //         },
+      //         gridLines: {
+      //           drawBorder: true,
+      //           color: 'rgba(0,0,0,0.1)',
+      //           zeroLineColor: "rgba(0,0,0,0.4)",
+      //           display: true
+      //         }
+      //       }],
 
-            xAxes: [{
-              barPercentage: 1.6,
-              gridLines: {
-                drawBorder: true,
-                color: 'rgba(0,0,0,0.1)',
-                zeroLineColor: "rgba(0,0,0,0.4)",
-                display: true
-              },
-              ticks: {
-                padding: 20,
-                fontColor: "#9f9f9f"
-              }
-            }]
-          },
-        }
-      });
+      //       xAxes: [{
+      //         barPercentage: 1.6,
+      //         gridLines: {
+      //           drawBorder: true,
+      //           color: 'rgba(0,0,0,0.1)',
+      //           zeroLineColor: "rgba(0,0,0,0.4)",
+      //           display: true
+      //         },
+      //         ticks: {
+      //           padding: 20,
+      //           fontColor: "#9f9f9f"
+      //         }
+      //       }]
+      //     },
+      //   }
+      // });
     }
 
     showNotification(style, message)
