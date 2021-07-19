@@ -42,18 +42,25 @@
   <div class="col-md-9">
     <div class="card card-search-workouts" *ngFor="let w of workouts; let i = index;">
       <div class="card-header">
-        <h2 class="card-title">
+        <h2 class="card-title" style="margin-bottom: 0px">
           <a [routerLink]="['/workout', w._id]">{{ w.name }}</a>
         </h2>
-      </div>
-      <div class="card-body">
         <span *ngIf="w.category != ''">Category: {{ w.category }} - </span>
         <span *ngIf="w.duration > 0">Duration: {{ w.duration / 60 }} mins - </span>
         <span *ngIf="w.tss > 0">TSS: {{ w.tss }}</span>
-        <br/>
-        <br/>
-        <h3>Description</h3>
-        <p>{{ w.description }}</p>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Description</h2>
+            <p style="white-space: pre-line">{{ w.description.substring(0, 200) }} ...</p>
+          </div>
+          <div class="col-md-6">
+            <h2>Goals</h2>
+            <p style="white-space: pre-line">{{ w.goals.substring(0, 200) }} ...</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

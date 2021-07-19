@@ -43,7 +43,7 @@ export class WorkoutComponent implements OnInit{
     }
 
     ngOnInit() {
-
+      this.workouts = [];
     }
 
     getWorkouts()
@@ -63,9 +63,28 @@ export class WorkoutComponent implements OnInit{
         this.workoutService.get(this.page, name, category)
         .pipe(first())
         .subscribe(workouts => {
-          this.workouts = workouts;
+          this.setWorkouts(workouts);
         });
       }
+    }
+
+    setWorkouts(workouts)
+    {
+      let workout;
+      this.workouts = [];
+
+      workouts.forEach(w => {
+        workout = w;
+        workout.goals = workout.description.split('\n\nGoals\n\n')[1];
+        workout.goals = workout.goals.replace('\n\n', '');
+
+        workout.description = workout.description.split('\n\nGoals\n\n')[0];
+        workout.description = workout.description.replace('How To\n\n', '');
+        workout.description = workout.description.replace('Description\n\n', '');
+        workout.description = workout.description.replace('\n\n', '');
+
+        this.workouts.push(w);
+      })
     }
 
     onSubmit()
@@ -80,6 +99,11 @@ export class WorkoutComponent implements OnInit{
       {
         this.page += x;
         this.getWorkouts()
+        window.scroll({
+          top: 0, 
+          left: 0, 
+          behavior: 'smooth' 
+         });
       }
     }
 

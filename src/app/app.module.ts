@@ -23,6 +23,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatButtonModule } from "@angular/material/button";
 import { MatButtonToggleModule } from "@angular/material/button-toggle";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { ClipboardModule } from '@angular/cdk/clipboard'
 
 import localFr from '@angular/common/locales/fr';
 import { registerLocaleData } from "@angular/common";
@@ -52,7 +53,8 @@ registerLocaleData(localFr);
     MatTableModule,
     MatButtonModule,
     MatButtonToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ClipboardModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -23,6 +23,9 @@ import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { WorkoutComponent } from 'app/pages/workout/workout.component';
 import { WorkoutDetailComponent } from 'app/pages/workoutDetail/workoutDetail.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ClipboardModule } from '@angular/cdk/clipboard'
+
 
 @NgModule({
   imports: [
@@ -37,7 +40,9 @@ import { WorkoutDetailComponent } from 'app/pages/workoutDetail/workoutDetail.co
     NgbModalModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatExpansionModule,
+    ClipboardModule
   ],
   declarations: [
     DashboardComponent,

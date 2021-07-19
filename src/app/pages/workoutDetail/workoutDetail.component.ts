@@ -11,6 +11,7 @@ import { Chart, ScatterController, LinearScale, LineElement, PointElement, Fille
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { FtpService } from "app/services/ftp.service";
 import { Subscription } from 'rxjs';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 
 @Component({
@@ -31,6 +32,7 @@ export class WorkoutDetailComponent implements OnInit{
     public ftp;
 
     subscription: Subscription;
+    panelState = false;
 
 
     constructor(
@@ -38,7 +40,8 @@ export class WorkoutDetailComponent implements OnInit{
         private workoutService: WorkoutService,
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
-        private ftpService: FtpService
+        private ftpService: FtpService,
+        private clipboard: Clipboard
     ) {
         Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin);
         this.user = authService.currentUserValue;
@@ -65,14 +68,19 @@ export class WorkoutDetailComponent implements OnInit{
         this.workoutService.getDetail(this.id)
         .pipe(first())
         .subscribe(workout => {
-          this.workout = workout;
-          this.workout.goals = this.workout.description.split('Goals\n\n')[1];
-          this.workout.description = this.workout.description.split('Goals\n\n')[0];
-          this.workout.description = this.workout.description.replace('How To\n\n', '');
-          this.workout.description = this.workout.description.replace('Description\n\n', '');
+          this.setWorkout(workout);
           this.workoutChart();
         });
       }
+    }
+
+    setWorkout(workout)
+    {
+      this.workout = workout;
+      this.workout.goals = this.workout.description.split('\n\nGoals\n\n')[1];
+      this.workout.description = this.workout.description.split('\n\nGoals\n\n')[0];
+      this.workout.description = this.workout.description.replace('How To\n\n', '');
+      this.workout.description = this.workout.description.replace('Description\n\n', '');
     }
 
     updateChart()
@@ -101,7 +109,6 @@ export class WorkoutDetailComponent implements OnInit{
       backgroundGradient.addColorStop(0, 'rgba(81,203,206,1)');   
       backgroundGradient.addColorStop(1, 'rgba(9,9,121,1)');
 
-      
       this.workout.data.forEach(d => {
         chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.ftp });
         chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.ftp });
@@ -109,7 +116,6 @@ export class WorkoutDetailComponent implements OnInit{
 
       this.chart = new Chart(this.ctx, {
         type: 'scatter',
-
         data: {
           datasets: [{
             label: this.workout.name,
@@ -125,6 +131,7 @@ export class WorkoutDetailComponent implements OnInit{
         options: {
           scales: {
             x: {
+              type: "linear",
               max: chartData[chartData.length - 1].x
             },
             y: {
@@ -133,6 +140,10 @@ export class WorkoutDetailComponent implements OnInit{
             }
           },
           plugins: {
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            },
             annotation: {
               annotations: {
                 line1: {
@@ -140,13 +151,26 @@ export class WorkoutDetailComponent implements OnInit{
                   yMin: this.ftp,
                   yMax: this.ftp,
                   borderColor: 'rgb(255, 99, 132)',
-                  borderWidth: 1,
+                  borderWidth: 2,
                 }
               }
             }
           }
         }
       });
+    }
+
+    copyIntervalsData()
+    {
+      let intervalsData = '';
+
+      this.workout.data.forEach(d => {
+        if(intervalsData != '') { intervalsData += '\n' }
+        intervalsData += '- ' + (d.endTime - d.startTime) + 's ' + (d.startPower == d.endPower ? d.startPower + '%' : 'ramp ' + d.startPower + '-' + d.endPower + '%');
+      });
+
+      this.clipboard.copy(intervalsData);
+      this.showNotification('succes', 'Intervals data copied to clipboard.');
     }
 
     showNotification(style, message)
