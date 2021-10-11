@@ -6,6 +6,9 @@
         </div>
         <div class="col-3 col-md-3" style="text-align: right;">
             <div style="margin-right: 25px;">
+                <button class="btn" style="height: 35px; margin-top: 0; margin-right: 5px" [routerLink]="['/workout']">
+                    <i class="fas fa-biking"></i>
+                </button>
                 <button [disabled]="this.refreshed" class="btn" style="height: 35px; margin-top: 0;" (click)="refresh()">
                     <i class="fas fa-refresh"></i>
                 </button>

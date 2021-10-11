@@ -16,10 +16,10 @@
           </div>
           <div class="row">
             <div class="col-md-12 pr-3">
-              <label>Categories:</label>
-              <label formArrayName="categories" *ngFor="let cat of categories; let i = index;" class="form-control" style="border: none !important;">
+              <label style="display: block;">Categories:</label>
+              <label formArrayName="categories" *ngFor="let cat of categories; let i = index;" class="form-control" style="border: none !important; display: inline-block; width: 45%;">
                 <input type="checkbox" [formControlName]="i">
-                {{cat}}
+                {{cat === '' ? 'No Category' : cat}}
               </label>
             </div>
           </div>

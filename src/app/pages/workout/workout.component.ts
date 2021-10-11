@@ -37,7 +37,7 @@ export class WorkoutComponent implements OnInit{
         private toastr: ToastrService
     ) {
         this.user = authService.currentUserValue;
-        this.categories = ['Sweet Spot', 'VO2 Max', 'Treshold', 'Endurance'];
+        this.categories = ['', 'Endurance', 'Tempo', 'Sweet Spot', 'Threshold', 'VO2 Max', 'Anaerobic', 'Sprint'];
         this.categories.forEach(() => this.workoutCategoriesFormArray.push(new FormControl(false)));
         this.getWorkouts();
     }

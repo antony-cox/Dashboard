@@ -7,8 +7,8 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
-import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
-import annotationPlugin from 'chartjs-plugin-annotation';
+import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler, Tooltip, Interaction } from 'chart.js';
+import  annotationPlugin  from 'chartjs-plugin-annotation';
 import { FtpService } from "app/services/ftp.service";
 import { Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -43,7 +43,7 @@ export class WorkoutDetailComponent implements OnInit{
         private ftpService: FtpService,
         private clipboard: Clipboard
     ) {
-        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin);
+        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin, Tooltip);
         this.user = authService.currentUserValue;
         this.id = this.activatedRoute.snapshot.paramMap.get("id");
         this.getWorkout();
@@ -125,7 +125,7 @@ export class WorkoutDetailComponent implements OnInit{
             backgroundColor: backgroundGradient,
             pointRadius: 0,
             showLine: true,
-            fill: 'origin',
+            fill: 'origin'
           }]
         },
         options: {
@@ -140,10 +140,6 @@ export class WorkoutDetailComponent implements OnInit{
             }
           },
           plugins: {
-            tooltip: {
-              mode: 'index',
-              intersect: false
-            },
             annotation: {
               annotations: {
                 line1: {
@@ -170,7 +166,7 @@ export class WorkoutDetailComponent implements OnInit{
       });
 
       this.clipboard.copy(intervalsData);
-      this.showNotification('succes', 'Intervals data copied to clipboard.');
+      this.showNotification('success', 'Intervals data copied to clipboard.');
     }
 
     showNotification(style, message)
