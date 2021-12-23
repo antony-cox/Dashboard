@@ -15,15 +15,22 @@ export class WorkoutService {
 
     get(page, name, category) {
         return this.http.post<Workout[]>(this.apiURL + '/workouts', { page: page, limit: 20, name: name, category: category })
-            .pipe(map(weights => {
-                return weights;
+            .pipe(map(workout => {
+                return workout;
             }));
     }
 
     getDetail(id) {
         return this.http.post<Workout>(this.apiURL + '/workouts/detail', { id: id })
-            .pipe(map(weights => {
-                return weights;
+            .pipe(map(workout => {
+                return workout;
+            }));
+    }
+
+    sendToIntervals(param) {
+        return this.http.post<any>(this.apiURL + '/workouts/sendToIntervals', param)
+            .pipe(map(result => {
+                return result;
             }));
     }
 }

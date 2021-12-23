@@ -34,6 +34,9 @@ export class WorkoutDetailComponent implements OnInit{
     subscription: Subscription;
     panelState = false;
 
+    dateForm = new FormGroup({
+      intervalsDate: new FormControl()
+    });
 
     constructor(
         private authService: AuthenticationService,
@@ -50,6 +53,7 @@ export class WorkoutDetailComponent implements OnInit{
     }
 
     ngOnInit() {
+      this.dateForm.controls['intervalsDate'].patchValue(new Date());
       this.workout = new Workout();
       this.subscription = this.ftpService.currentFtp.subscribe(ftp => {
         this.ftp = ftp;
@@ -167,6 +171,35 @@ export class WorkoutDetailComponent implements OnInit{
 
       this.clipboard.copy(intervalsData);
       this.showNotification('success', 'Intervals data copied to clipboard.');
+    }
+
+    sendToIntervals()
+    {
+      const intervalDate = new Date(this.dateForm.controls['intervalsDate'].value);
+
+      if(intervalDate != null && intervalDate != undefined)
+      {
+        if(this.user.intervalsId != '' && this.user.intervalsKey != '')
+        {
+          const param = {
+            workoutId: this.workout._id,
+            intervalsId: this.user.intervalsId,
+            intervalsKey: this.user.intervalsKey,
+            intervalsDate: intervalDate.getFullYear() + '-' +  (intervalDate.getMonth() + 1) + '-' + intervalDate.getDate()
+          }
+  
+          this.workoutService.sendToIntervals(param).subscribe(result => {
+            if(result.id != null && result.id != undefined)
+            {
+              this.showNotification('succes', 'Workout sent successfully.');
+            }
+          });
+        } else {
+          this.showNotification('danger', 'Intervals.icu configuration missing, please add in Profile.');   
+        }
+      } else {
+        this.showNotification('danger', 'Please select a valid date.');
+      }
     }
 
     showNotification(style, message)

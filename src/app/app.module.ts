@@ -27,6 +27,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
 
 import localFr from '@angular/common/locales/fr';
 import { registerLocaleData } from "@angular/common";
+import { MatNativeDateModule } from "@angular/material/core";
 registerLocaleData(localFr);
 
 
@@ -54,7 +55,8 @@ registerLocaleData(localFr);
     MatButtonModule,
     MatButtonToggleModule,
     MatProgressSpinnerModule,
-    ClipboardModule
+    ClipboardModule,
+    MatNativeDateModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

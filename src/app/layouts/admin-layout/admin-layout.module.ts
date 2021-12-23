@@ -25,6 +25,7 @@ import { WorkoutComponent } from 'app/pages/workout/workout.component';
 import { WorkoutDetailComponent } from 'app/pages/workoutDetail/workoutDetail.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ClipboardModule } from '@angular/cdk/clipboard'
+import { MatDatepickerModule } from '@angular/material/datepicker'; 
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     MatTableModule,
     MatProgressSpinnerModule,
     MatExpansionModule,
-    ClipboardModule
+    ClipboardModule,
+    MatDatepickerModule
   ],
   declarations: [
     DashboardComponent,

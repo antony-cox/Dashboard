@@ -79,7 +79,8 @@ export class UserComponent implements OnInit{
                 userId: this.user._id,
                 email: this.user.email,
                 intervalsId: this.user.intervalsId,
-                intervalsKey: this.user.intervalsKey
+                intervalsKey: this.user.intervalsKey,
+                active: true
             });
         }
     }
@@ -116,6 +117,7 @@ export class UserComponent implements OnInit{
                 this.user.intervalsId = this.userForm.get('intervalsId').value;
                 this.user.intervalsKey = this.userForm.get('intervalsKey').value;
                 this.user.password = this.userForm.get('password').value;
+                this.user.active = this.userForm.get('active').value;
             }
 
             this.userService.saveUser(this.user)

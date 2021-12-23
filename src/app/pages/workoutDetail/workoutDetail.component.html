@@ -24,17 +24,34 @@
           </div>
           <div class="col-md-4">
             <h2>Intervals.icu</h2>
-            <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  {{panelState ? 'Hide data' : 'Show data'}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <span *ngFor="let d of workout.data; let i = index;">
-                - {{ (d.endTime - d.startTime) }}s {{ d.startPower == d.endPower ? d.startPower + '%' : 'ramp ' + d.startPower + '-' + d.endPower + '%' }} <br/>
-              </span>
-            </mat-expansion-panel>
-            <button type="button" (click)="copyIntervalsData()" class="btn btn-primary">Copy to clipboard</button>
+            <div class="row">
+              <div class="col-md-6">
+                <mat-expansion-panel (opened)="panelState = true" (closed)="panelState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      {{panelState ? 'Hide data' : 'Show data'}}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <span *ngFor="let d of workout.data; let i = index;">
+                    - {{ (d.endTime - d.startTime) }}s {{ d.startPower == d.endPower ? d.startPower + '%' : 'ramp ' + d.startPower + '-' + d.endPower + '%' }} <br/>
+                  </span>
+                </mat-expansion-panel>
+              </div>   
+              <div class="col-md-6">
+                <button type="button" (click)="copyIntervalsData()" class="btn btn-primary">Copy to clipboard</button>
+              </div>   
+            </div>
+            <div class="row">
+              <div class="col-md-6" [formGroup]="dateForm">
+                <input type="text" class="form-control" readonly matInput [matDatepicker]="picker" 
+                  [value]="intervalDate" style="margin-top: 15px; width: 80%; display: inline-block;" formControlName="intervalsDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker ng-model-options="{timezone: 'utc'}" #picker></mat-datepicker>
+              </div>
+              <div class="col-md-6">
+                <button type="button" (click)="sendToIntervals()" class="btn btn-primary">Send to intervals.icu</button>   
+              </div>
+            </div>
           </div>
         </div>
       </div>

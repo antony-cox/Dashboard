@@ -353,3 +353,7 @@
 .pointer {
   cursor: pointer;
 }
+
+.mat-datepicker-toggle {
+  color: #252422 !important;
+}
