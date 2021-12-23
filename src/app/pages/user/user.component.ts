@@ -24,6 +24,8 @@ export class UserComponent implements OnInit{
     userForm = this.fb.group({
         userId: [{value: '', disabled: true}, Validators.required],
         email: ['', Validators.required],
+        intervalsId: [''],
+        intervalsKey: [''],
         password: [''],
         confirmPassword: [''],
         active: [false],
@@ -61,6 +63,8 @@ export class UserComponent implements OnInit{
                 this.userForm.patchValue ({
                     userId: user._id,
                     email: user.email,
+                    intervalsId: user.intervalsId,
+                    intervalsKey: user.intervalsKey,
                     active: user.active
                 });
 
@@ -73,7 +77,9 @@ export class UserComponent implements OnInit{
             this.user = this.authService.currentUserValue;
             this.userForm.patchValue ({
                 userId: this.user._id,
-                email: this.user.email
+                email: this.user.email,
+                intervalsId: this.user.intervalsId,
+                intervalsKey: this.user.intervalsKey
             });
         }
     }
@@ -93,6 +99,8 @@ export class UserComponent implements OnInit{
             if(this.superAdmin)
             {
                 this.user.email = this.userForm.get('email').value;
+                this.user.intervalsId = this.userForm.get('intervalsId').value;
+                this.user.intervalsKey = this.userForm.get('intervalsKey').value;
                 this.user.password = this.userForm.get('password').value;
                 this.user.active = this.userForm.get('active').value;
                 this.user.permissions = [];
@@ -105,6 +113,8 @@ export class UserComponent implements OnInit{
                 });
             } else {
                 this.user.email = this.userForm.get('email').value;
+                this.user.intervalsId = this.userForm.get('intervalsId').value;
+                this.user.intervalsKey = this.userForm.get('intervalsKey').value;
                 this.user.password = this.userForm.get('password').value;
             }
 
