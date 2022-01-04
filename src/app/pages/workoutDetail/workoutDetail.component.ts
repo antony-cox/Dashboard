@@ -7,8 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
-import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler, Tooltip, Interaction } from 'chart.js';
-import  annotationPlugin  from 'chartjs-plugin-annotation';
+import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler, Tooltip } from 'chart.js';
+import annotationPlugin  from 'chartjs-plugin-annotation';
+import { CrosshairPlugin } from 'chartjs-plugin-crosshair'
 import { FtpService } from "app/services/ftp.service";
 import { Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
@@ -46,7 +47,7 @@ export class WorkoutDetailComponent implements OnInit{
         private ftpService: FtpService,
         private clipboard: Clipboard
     ) {
-        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin, Tooltip);
+        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin, Tooltip, CrosshairPlugin);
         this.user = authService.currentUserValue;
         this.id = this.activatedRoute.snapshot.paramMap.get("id");
         this.getWorkout();
@@ -57,6 +58,7 @@ export class WorkoutDetailComponent implements OnInit{
       this.workout = new Workout();
       this.subscription = this.ftpService.currentFtp.subscribe(ftp => {
         this.ftp = ftp;
+        globalThis.ftp = this.ftp;
         if(this.workout.data != undefined) { this.updateChart(); }
       });
     }
@@ -154,10 +156,104 @@ export class WorkoutDetailComponent implements OnInit{
                   borderWidth: 2,
                 }
               }
+            },
+            tooltip: {
+              mode: 'interpolate',
+              intersect: false,
+              enabled: false,
+              external: function(context) {
+                // Tooltip Element
+                var tooltipEl = document.getElementById('chartjs-tooltip');
+
+                // Create element on first render
+                if (!tooltipEl) {
+                  tooltipEl = document.createElement('div');
+                  tooltipEl.id = 'chartjs-tooltip';
+                  const table = document.createElement('table');
+                  table.style.margin = '0px';
+
+                  tooltipEl.appendChild(table);
+                  document.body.appendChild(tooltipEl);
+                }
+                
+                // Hide if no tooltip
+                var tooltipModel = context.tooltip;
+                var time = minTommss(tooltipModel.dataPoints[0].element.x);
+                var power = tooltipModel.dataPoints[0].element.y;
+
+                function minTommss(minutes) {
+                  var min = Math.floor(Math.abs(minutes));
+                  var sec = Math.floor((Math.abs(minutes) * 60) % 60);
+                  return (min < 10 ? "0" : "") + min + ":" + (sec < 10 ? "0" : "") + sec;
+                }
+
+                if (tooltipModel.opacity === 0) {
+                    tooltipEl.style.opacity = '0';
+                    return;
+                }
+
+                const tableBody = document.createElement('tbody');
+                tableBody.appendChild(getRow(power, 'p'));
+                tableBody.appendChild(getRow(time, 't'));
+
+                function getRow(value, type)
+                {
+                  const span = document.createElement('span');
+                  span.style.borderWidth = '2px';
+                  span.style.marginRight = '10px';
+                  span.style.height = '10px';
+                  span.style.width = '10px';
+                  span.style.display = 'inline-block';
+
+                  const tr = document.createElement('tr');
+                  tr.style.backgroundColor = 'inherit';
+                  tr.style.borderWidth = '0';
+
+                  const td = document.createElement('td');
+                  td.style.borderWidth = '0';
+
+                  const content = type === 'p' ? 'Power: ' + Math.round(value) + 'W (' + Math.round((value / globalThis.ftp) * 100) + '%)' : 'Time: ' + value + ' min';
+                  const powerText = document.createTextNode(content);
+
+                  td.appendChild(span);
+                  td.appendChild(powerText);
+                  tr.appendChild(td);
+
+                  return tr;
+                }
+
+                const tableRoot = tooltipEl.querySelector('table');
+
+                // Remove old children
+                while (tableRoot.firstChild) {
+                  tableRoot.firstChild.remove();
+                }
+
+                // Add new children
+                tableRoot.appendChild(tableBody);
+
+                var position = context.chart.canvas.getBoundingClientRect();
+
+                // Display, position, and set styles for font
+                tooltipEl.style.opacity = '1';
+                tooltipEl.style.position = 'absolute';
+                tooltipEl.style.left = position.left + window.pageXOffset + tooltipModel.caretX + 'px';
+                tooltipEl.style.top = position.top + window.pageYOffset + tooltipModel.caretY + 'px';
+                tooltipEl.style.pointerEvents = 'none';
+                tooltipEl.style.background = 'rgba(0, 0, 0, 0.7)';
+                tooltipEl.style.borderRadius = '3px';
+                tooltipEl.style.color = 'white';
+                tooltipEl.style.transition = 'all .1s ease';
+                tooltipEl.style.width = '160px';
+                tooltipEl.style.height = '50px';
+                tooltipEl.style.paddingTop = '5px';
+              }
             }
           }
         }
       });
+
+      this.chart.data.datasets[0].interpolate = true;
     }
 
     copyIntervalsData()
