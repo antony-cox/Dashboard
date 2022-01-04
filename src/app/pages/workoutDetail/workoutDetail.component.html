@@ -44,7 +44,7 @@
             <div class="row">
               <div class="col-md-6" [formGroup]="dateForm">
                 <input type="text" class="form-control" readonly matInput [matDatepicker]="picker" 
-                  [value]="intervalDate" style="margin-top: 15px; width: 80%; display: inline-block;" formControlName="intervalsDate">
+                  style="margin-top: 15px; width: 80%; display: inline-block;" formControlName="intervalsDate">
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker ng-model-options="{timezone: 'utc'}" #picker></mat-datepicker>
               </div>

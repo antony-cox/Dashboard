@@ -176,6 +176,8 @@ export class WorkoutDetailComponent implements OnInit{
     sendToIntervals()
     {
       const intervalDate = new Date(this.dateForm.controls['intervalsDate'].value);
+      const month = intervalDate.getMonth() < 9 ? '0' + (intervalDate.getMonth() + 1) : (intervalDate.getMonth() + 1)
+      const day = intervalDate.getDate() < 9 ? '0' + intervalDate.getDate() : intervalDate.getDate()
 
       if(intervalDate != null && intervalDate != undefined)
       {
@@ -185,13 +187,15 @@ export class WorkoutDetailComponent implements OnInit{
             workoutId: this.workout._id,
             intervalsId: this.user.intervalsId,
             intervalsKey: this.user.intervalsKey,
-            intervalsDate: intervalDate.getFullYear() + '-' +  (intervalDate.getMonth() + 1) + '-' + intervalDate.getDate()
+            intervalsDate: intervalDate.getFullYear() + '-' + month + '-' + day
           }
   
           this.workoutService.sendToIntervals(param).subscribe(result => {
             if(result.id != null && result.id != undefined)
             {
               this.showNotification('succes', 'Workout sent successfully.');
+            } else {
+              this.showNotification('danger', 'Macheert nie.');       
             }
           });
         } else {
