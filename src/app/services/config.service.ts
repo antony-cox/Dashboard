@@ -19,6 +19,13 @@ export class ConfigService {
             }));
     }
 
+    getLeaderboardDate() {
+        return this.http.get<any>(this.apiURL + '/config/getLeaderboardDate')
+            .pipe(map(config => {
+                return config;
+            }));
+    }
+
     add(config) {
         return this.http.post<any>(this.apiURL + '/config/add', { config })
         .pipe(map(data => {

@@ -6,6 +6,9 @@
         </div>
         <div class="col-3 col-md-3" style="text-align: right;">
             <div style="margin-right: 25px;">
+                <span style="margin-right: 10px;">
+                    Last updated: {{ this.leaderboardRefreshed | date:'dd/MM/yyyy HH:mm:ss'}}
+                </span>
                 <button class="btn" style="height: 35px; margin-top: 0; margin-right: 5px" [routerLink]="['/workout']">
                     <i class="fas fa-biking"></i>
                 </button>

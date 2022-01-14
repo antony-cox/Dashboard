@@ -5,6 +5,7 @@ import { LeaderboardService } from 'app/services/leaderboard.service';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Podium } from 'app/shared/model/podium';
+import { ConfigService } from 'app/services/config.service';
 
 @Component({ templateUrl: 'leaderboard.component.html' })
 export class LeaderboardComponent implements OnInit {
@@ -22,8 +23,12 @@ export class LeaderboardComponent implements OnInit {
     podium;
     refreshed;
     tableImgPath;
+    public leaderboardRefreshed: Date;
 
-    constructor(private leaderboardService: LeaderboardService, private router: Router) {
+    constructor(
+        private leaderboardService: LeaderboardService, 
+        private router: Router,
+        private configService: ConfigService) {
         Chart.register(BarController, LinearScale, LineElement, PointElement, Filler, CategoryScale, BarElement, Tooltip);
     }
 
@@ -86,6 +91,15 @@ export class LeaderboardComponent implements OnInit {
             this.getTableData();
             this.getPodium();
             this.loading = false;
+        });
+
+        this.configService.getLeaderboardDate()
+        .pipe(first())
+        .subscribe(result => {
+            if(result != null)
+            {
+                this.leaderboardRefreshed = result;
+            }
         });
     }
 
