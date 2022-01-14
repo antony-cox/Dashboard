@@ -15,7 +15,9 @@ export class AuthenticationService {
     constructor(private http: HttpClient, private settings: SettingsService) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
-        this.apiURL = settings.getApiURL;
+        globalThis.ftp = this.currentUserValue.ftp;
+        globalThis.weight = this.currentUserValue.weight;
+        this.apiURL = this.settings.getApiURL;
     }
 
     public get currentUserValue(): User {
@@ -28,6 +30,8 @@ export class AuthenticationService {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
+                globalThis.ftp = user.ftp;
+                globalThis.weight = user.weight;
                 return user;
             }));
     }

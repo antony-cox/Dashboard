@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FormControl, FormGroup, Validators, FormBuilder, FormArray } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { User } from 'app/models/user';
-import { first, throwIfEmpty } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
@@ -10,7 +10,6 @@ import { WorkoutService } from 'app/services/workout.service';
 import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler, Tooltip } from 'chart.js';
 import annotationPlugin  from 'chartjs-plugin-annotation';
 import { CrosshairPlugin } from 'chartjs-plugin-crosshair'
-import { FtpService } from "app/services/ftp.service";
 import { Subscription } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 
@@ -30,7 +29,6 @@ export class WorkoutDetailComponent implements OnInit{
     public ctx;
     public chart;
     public chartColor;
-    public ftp;
 
     subscription: Subscription;
     panelState = false;
@@ -44,7 +42,6 @@ export class WorkoutDetailComponent implements OnInit{
         private workoutService: WorkoutService,
         private toastr: ToastrService,
         private activatedRoute: ActivatedRoute,
-        private ftpService: FtpService,
         private clipboard: Clipboard
     ) {
         Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin, Tooltip, CrosshairPlugin);
@@ -56,15 +53,7 @@ export class WorkoutDetailComponent implements OnInit{
     ngOnInit() {
       this.dateForm.controls['intervalsDate'].patchValue(new Date());
       this.workout = new Workout();
-      this.subscription = this.ftpService.currentFtp.subscribe(ftp => {
-        this.ftp = ftp;
-        globalThis.ftp = this.ftp;
-        if(this.workout.data != undefined) { this.updateChart(); }
-      });
-    }
-
-    ngOnDestroy() {
-      this.subscription.unsubscribe();    
+      this.user = this.authService.currentUserValue;
     }
 
     getWorkout()
@@ -94,14 +83,14 @@ export class WorkoutDetailComponent implements OnInit{
       let chartData = [];
 
       this.workout.data.forEach(d => {
-        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.ftp });
-        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.ftp });
+        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.user.ftp });
+        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.user.ftp });
       })
 
       this.chart.data.datasets[0].data = chartData;
-      this.chart.options.scales.y.suggestedMax = 1.2 * this.ftp;
-      this.chart.options.plugins.annotation.annotations.line1.yMin = this.ftp;
-      this.chart.options.plugins.annotation.annotations.line1.yMax = this.ftp;
+      this.chart.options.scales.y.suggestedMax = 1.2 * this.user.ftp;
+      this.chart.options.plugins.annotation.annotations.line1.yMin = this.user.ftp;
+      this.chart.options.plugins.annotation.annotations.line1.yMax = this.user.ftp;
       this.chart.update();
     }
 
@@ -116,8 +105,8 @@ export class WorkoutDetailComponent implements OnInit{
       backgroundGradient.addColorStop(1, 'rgba(9,9,121,1)');
 
       this.workout.data.forEach(d => {
-        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.ftp });
-        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.ftp });
+        chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.user.ftp });
+        chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.user.ftp });
       })
 
       this.chart = new Chart(this.ctx, {
@@ -142,7 +131,7 @@ export class WorkoutDetailComponent implements OnInit{
             },
             y: {
               min: 0,
-              suggestedMax: 1.2 * this.ftp
+              suggestedMax: 1.2 * this.user.ftp
             }
           },
           plugins: {
@@ -150,8 +139,8 @@ export class WorkoutDetailComponent implements OnInit{
               annotations: {
                 line1: {
                   type: 'line',
-                  yMin: this.ftp,
-                  yMax: this.ftp,
+                  yMin: this.user.ftp,
+                  yMax: this.user.ftp,
                   borderColor: 'rgb(255, 99, 132)',
                   borderWidth: 2,
                 }
@@ -193,8 +182,9 @@ export class WorkoutDetailComponent implements OnInit{
                 }
 
                 const tableBody = document.createElement('tbody');
-                tableBody.appendChild(getRow(power, 'p'));
                 tableBody.appendChild(getRow(time, 't'));
+                tableBody.appendChild(getRow(power, 'p'));
+                tableBody.appendChild(getRow(power/globalThis.weight, 'pw'));
 
                 function getRow(value, type)
                 {
@@ -212,7 +202,21 @@ export class WorkoutDetailComponent implements OnInit{
                   const td = document.createElement('td');
                   td.style.borderWidth = '0';
 
-                  const content = type === 'p' ? 'Power: ' + Math.round(value) + 'W (' + Math.round((value / globalThis.ftp) * 100) + '%)' : 'Time: ' + value + ' min';
+                  let content = '';
+
+                  switch(type)
+                  {
+                    case 'p': 
+                      content = 'Power: ' + Math.round(value) + 'W (' + Math.round((value / globalThis.ftp) * 100) + '%)';
+                      break;
+                    case 'pw':
+                      content = 'Power/Weight: ' + Math.round(value * 100) / 100 + ' W/KG';
+                      break;
+                    case 't':
+                      content = 'Time: ' + value + ' min';
+                      break;
+                  }
+
                   const powerText = document.createTextNode(content);
 
                   td.appendChild(span);
@@ -244,8 +248,8 @@ export class WorkoutDetailComponent implements OnInit{
                 tooltipEl.style.borderRadius = '3px';
                 tooltipEl.style.color = 'white';
                 tooltipEl.style.transition = 'all .1s ease';
-                tooltipEl.style.width = '160px';
-                tooltipEl.style.height = '50px';
+                tooltipEl.style.width = '200px';
+                tooltipEl.style.height = '75px';
                 tooltipEl.style.paddingTop = '5px';
               }
             }

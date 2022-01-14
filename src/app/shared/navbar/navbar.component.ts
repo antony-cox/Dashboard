@@ -5,7 +5,7 @@ import { Location} from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
-import { FtpService } from "../../services/ftp.service";
+import { User } from 'app/models/user';
 
 @Component({
     moduleId: module.id,
@@ -19,15 +19,11 @@ export class NavbarComponent implements OnInit{
     private nativeElement: Node;
     private toggleButton;
     private sidebarVisible: boolean;
-    private ftp: number;
     public editFtp = false;
+    private user: User;
 
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
-
-    ftpForm = this.formBuilder.group({
-      ftp: ['', Validators.required]
-    }); 
 
     constructor(
       location:Location, 
@@ -35,22 +31,20 @@ export class NavbarComponent implements OnInit{
       private element : ElementRef, 
       private router: Router, 
       private authSerivce: AuthenticationService,
-      private formBuilder: FormBuilder,
-      private ftpService: FtpService) {
+      private formBuilder: FormBuilder) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
     }
 
     ngOnInit(){
+      this.user = this.authSerivce.currentUserValue;
         this.listTitles = ROUTES.filter(listTitle => listTitle);
         var navbar : HTMLElement = this.element.nativeElement;
         this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
         this.router.events.subscribe((event) => {
           this.sidebarClose();
        });
-
-       this.ftp = localStorage.getItem('ftp') != undefined && localStorage.getItem('ftp') != '' ? parseInt(localStorage.getItem('ftp')) : 100;
     }
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -114,23 +108,5 @@ export class NavbarComponent implements OnInit{
       logout() {
         this.authSerivce.logout();
         this.router.navigate(['/login']);
-      }
-
-      setFtp()
-      {
-        this.editFtp = true;
-      }
-
-      saveFtp()
-      {
-        if(this.ftpForm.valid)
-        {
-          let newFtp = this.ftpForm.controls['ftp'].value;
-          console.log(newFtp);
-          localStorage.setItem('ftp', newFtp);
-          this.ftpService.setFtp(newFtp);
-          this.ftp = newFtp;
-          this.editFtp = false;
-        }
       }
 }

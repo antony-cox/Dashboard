@@ -6,5 +6,7 @@
     token: string;
     intervalsId: string;
     intervalsKey: string;
+    ftp: number;
+    weight: number;
     active: boolean;
 }

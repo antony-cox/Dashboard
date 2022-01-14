@@ -24,6 +24,8 @@ export class UserComponent implements OnInit{
     userForm = this.fb.group({
         userId: [{value: '', disabled: true}, Validators.required],
         email: ['', Validators.required],
+        ftp: [0],
+        weight: [0],
         intervalsId: [''],
         intervalsKey: [''],
         password: [''],
@@ -63,6 +65,8 @@ export class UserComponent implements OnInit{
                 this.userForm.patchValue ({
                     userId: user._id,
                     email: user.email,
+                    ftp: user.ftp,
+                    weight: user.weight,
                     intervalsId: user.intervalsId,
                     intervalsKey: user.intervalsKey,
                     active: user.active
@@ -78,6 +82,8 @@ export class UserComponent implements OnInit{
             this.userForm.patchValue ({
                 userId: this.user._id,
                 email: this.user.email,
+                ftp: this.user.ftp,
+                weight: this.user.weight,
                 intervalsId: this.user.intervalsId,
                 intervalsKey: this.user.intervalsKey,
                 active: true
@@ -100,6 +106,8 @@ export class UserComponent implements OnInit{
             if(this.superAdmin)
             {
                 this.user.email = this.userForm.get('email').value;
+                this.user.ftp = this.userForm.get('ftp').value;
+                this.user.weight = this.userForm.get('weight').value;
                 this.user.intervalsId = this.userForm.get('intervalsId').value;
                 this.user.intervalsKey = this.userForm.get('intervalsKey').value;
                 this.user.password = this.userForm.get('password').value;
@@ -114,6 +122,8 @@ export class UserComponent implements OnInit{
                 });
             } else {
                 this.user.email = this.userForm.get('email').value;
+                this.user.ftp = this.userForm.get('ftp').value;
+                this.user.weight = this.userForm.get('weight').value;
                 this.user.intervalsId = this.userForm.get('intervalsId').value;
                 this.user.intervalsKey = this.userForm.get('intervalsKey').value;
                 this.user.password = this.userForm.get('password').value;
