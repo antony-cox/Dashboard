@@ -40,7 +40,7 @@
     </div>
   </div>
   <div class="col-md-9">
-    <div class="card card-search-workouts" *ngFor="let w of workouts; let i = index;">
+    <div class="card card-search-workouts" *ngFor="let w of workouts; let i = index;" >
       <div class="card-header">
         <h2 class="card-title" style="margin-bottom: 0px">
           <a [routerLink]="['/workout', w._id]">{{ w.name }}</a>
@@ -51,16 +51,20 @@
       </div>
       <div class="card-body">
         <div class="row">
+          <div class="col-md-12">
+            <canvas id="chart_{{w.name}}" height="50px"></canvas>
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-6">
-            <h2>Description</h2>
+            <h2 style="margin-bottom: 5px">Description</h2>
             <p style="white-space: pre-line">{{ w.description.substring(0, 200) }} ...</p>
           </div>
           <div class="col-md-6">
-            <h2>Goals</h2>
+            <h2 style="margin-bottom: 5px">Goals</h2>
             <p style="white-space: pre-line">{{ w.goals.substring(0, 200) }} ...</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>

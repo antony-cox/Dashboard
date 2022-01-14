@@ -54,6 +54,11 @@ export class WorkoutDetailComponent implements OnInit{
       this.dateForm.controls['intervalsDate'].patchValue(new Date());
       this.workout = new Workout();
       this.user = this.authService.currentUserValue;
+      if(this.user.ftp == undefined || this.user.ftp == 0) 
+      {
+        globalThis.ftp = 100;
+        this.user.ftp = 100;
+      }
     }
 
     getWorkout()
@@ -184,7 +189,7 @@ export class WorkoutDetailComponent implements OnInit{
                 const tableBody = document.createElement('tbody');
                 tableBody.appendChild(getRow(time, 't'));
                 tableBody.appendChild(getRow(power, 'p'));
-                tableBody.appendChild(getRow(power/globalThis.weight, 'pw'));
+                if(globalThis.weight > 0) tableBody.appendChild(getRow(power/globalThis.weight, 'pw'));
 
                 function getRow(value, type)
                 {
@@ -249,7 +254,7 @@ export class WorkoutDetailComponent implements OnInit{
                 tooltipEl.style.color = 'white';
                 tooltipEl.style.transition = 'all .1s ease';
                 tooltipEl.style.width = '200px';
-                tooltipEl.style.height = '75px';
+                tooltipEl.style.height =  tableBody.children.length * 25 + 'px';
                 tooltipEl.style.paddingTop = '5px';
               }
             }

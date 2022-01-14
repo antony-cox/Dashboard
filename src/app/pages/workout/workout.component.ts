@@ -6,8 +6,9 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from 'app/services/authentication.service';
 import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
-import { Chart } from 'chart.js';
-import { formatDate } from '@angular/common';
+import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
+import annotationPlugin  from 'chartjs-plugin-annotation';
+import Annotation from 'chartjs-plugin-annotation';
 
 @Component({
     selector: 'workout-cmp',
@@ -20,6 +21,8 @@ export class WorkoutComponent implements OnInit{
     public workouts: Workout[];
     public categories;
     public page = 1;
+    public chartsCreated = false;
+    public charts;
 
     workoutSearchForm = this.formBuilder.group({
       name: [''],
@@ -36,6 +39,7 @@ export class WorkoutComponent implements OnInit{
         private workoutService: WorkoutService,
         private toastr: ToastrService
     ) {
+        Chart.register(ScatterController, LinearScale, LineElement, PointElement, Filler, annotationPlugin);
         this.user = authService.currentUserValue;
         this.categories = ['', 'Endurance', 'Tempo', 'Sweet Spot', 'Threshold', 'VO2 Max', 'Anaerobic', 'Sprint'];
         this.categories.forEach(() => this.workoutCategoriesFormArray.push(new FormControl(false)));
@@ -44,6 +48,12 @@ export class WorkoutComponent implements OnInit{
 
     ngOnInit() {
       this.workouts = [];
+      this.charts = new Map<string, any>();
+    }
+
+    ngAfterViewChecked()
+    {
+      this.getCharts();
     }
 
     getWorkouts()
@@ -84,7 +94,82 @@ export class WorkoutComponent implements OnInit{
         workout.description = workout.description.replace('\n\n', '');
 
         this.workouts.push(w);
-      })
+      });
+
+      this.chartsCreated = false;
+      this.getCharts();
+    }
+
+    getCharts()
+    {
+      if(!this.chartsCreated) 
+      {
+        this.workouts.forEach(w => {
+          let canvas = <any> document.getElementById('chart_' + w.name);
+          if(this.charts.has(w.name))
+          {
+            this.charts.get(w.name).destroy();
+            this.charts.delete(w.name);
+          }
+          if(canvas != null)
+          {
+            this.chartsCreated = true;
+            let ctx = canvas.getContext("2d");
+            let chartData = [];
+            let backgroundGradient =  ctx.createLinearGradient(0, 0, 0, 600);
+            backgroundGradient.addColorStop(0, 'rgba(81,203,206,1)');   
+            backgroundGradient.addColorStop(1, 'rgba(9,9,121,1)');
+
+            w.data.forEach(d => {
+              chartData.push({x: d.startTime/60, y: (d.startPower/100) * this.user.ftp });
+              chartData.push({x: d.endTime/60, y: (d.endPower/100) * this.user.ftp });
+            });
+
+            let chart = new Chart(ctx, {
+              type: 'scatter',
+              data: {
+                datasets: [{
+                  label: w.name,
+                  data: chartData,
+                  borderColor: 'rgba(9,9,121,1)',
+                  borderWidth: 2,
+                  backgroundColor: backgroundGradient,
+                  pointRadius: 0,
+                  showLine: true,
+                  fill: 'origin'
+                }]
+              },
+              options: {
+                scales: {
+                  x: {
+                    type: "linear",
+                    max: chartData[chartData.length - 1].x
+                  },
+                  y: {
+                    min: 0,
+                    suggestedMax: 1.2 * this.user.ftp
+                  }
+                },
+                plugins: {
+                  annotation: {
+                    annotations: {
+                      line1: {
+                        type: 'line',
+                        yMin: this.user.ftp,
+                        yMax: this.user.ftp,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                      }
+                    }
+                  }
+                }
+              }
+            });
+
+            this.charts.set(w.name, chart);        
+          }
+        });
+      }
     }
 
     onSubmit()

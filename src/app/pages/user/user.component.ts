@@ -133,6 +133,8 @@ export class UserComponent implements OnInit{
             this.userService.saveUser(this.user)
             .pipe(first())
             .subscribe(result => {
+                globalThis.ftp = this.user.ftp;
+                globalThis.weight = this.user.weight;
                 this.showNotification('success', 'User saved successfully.');
              });
         }
