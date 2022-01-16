@@ -8,7 +8,7 @@ import { Workout } from 'app/models/workout';
 import { WorkoutService } from 'app/services/workout.service';
 import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
 import annotationPlugin  from 'chartjs-plugin-annotation';
-import Annotation from 'chartjs-plugin-annotation';
+import { Options } from '@angular-slider/ngx-slider';
 
 @Component({
     selector: 'workout-cmp',
@@ -23,6 +23,8 @@ export class WorkoutComponent implements OnInit{
     public page = 1;
     public chartsCreated = false;
     public charts;
+    public tssLow: number = 0;
+    public tssHigh: number = 300;
 
     workoutSearchForm = this.formBuilder.group({
       name: [''],
@@ -31,7 +33,14 @@ export class WorkoutComponent implements OnInit{
 
     get workoutCategoriesFormArray() {
       return this.workoutSearchForm.controls.categories as FormArray;
-  }
+    }
+
+    sliderMinValue: number = 0;
+    sliderMaxValue: number = 300;
+    sliderOptions: Options = {
+      floor: 0,
+      ceil: 300
+    };
 
     constructor(
         private authService: AuthenticationService,
@@ -70,7 +79,7 @@ export class WorkoutComponent implements OnInit{
 
       if(this.user.permissions.includes('WORKOUT'))
       {
-        this.workoutService.get(this.page, name, category)
+        this.workoutService.get(this.page, name, category, this.tssLow, this.tssHigh)
         .pipe(first())
         .subscribe(workouts => {
           this.setWorkouts(workouts);
@@ -85,14 +94,17 @@ export class WorkoutComponent implements OnInit{
 
       workouts.forEach(w => {
         workout = w;
-        workout.goals = workout.description.split('\n\nGoals\n\n')[1];
-        workout.goals = workout.goals.replace('\n\n', '');
 
-        workout.description = workout.description.split('\n\nGoals\n\n')[0];
-        workout.description = workout.description.replace('How To\n\n', '');
-        workout.description = workout.description.replace('Description\n\n', '');
-        workout.description = workout.description.replace('\n\n', '');
-
+        if(workout.description != null && workout.description != undefined)
+        {
+          workout.goals = workout.description.split('\n\nGoals\n\n')[1];
+          workout.goals = workout.goals != undefined ? workout.goals.replace('\n\n', '') : '';
+          workout.description = workout.description.split('\n\nGoals\n\n')[0];
+          workout.description = workout.description.replace('How To\n\n', '');
+          workout.description = workout.description.replace('Description\n\n', '');
+          workout.description = workout.description.replace('\n\n', '');
+        }
+        
         this.workouts.push(w);
       });
 
@@ -172,6 +184,16 @@ export class WorkoutComponent implements OnInit{
       }
     }
 
+    updateTssLow(event)
+    {
+      this.tssLow = event;
+    }
+
+    updateTssHigh(event)
+    {
+      this.tssHigh = event;
+    }
+    
     onSubmit()
     {
       this.page = 1

@@ -13,8 +13,8 @@ export class WorkoutService {
         this.apiURL = settings.getApiURL;
     }
 
-    get(page, name, category) {
-        return this.http.post<Workout[]>(this.apiURL + '/workouts', { page: page, limit: 20, name: name, category: category })
+    get(page, name, category, tssLow, tssHigh) {
+        return this.http.post<Workout[]>(this.apiURL + '/workouts', { page: page, limit: 20, name: name, category: category, tssLow: tssLow, tssHigh: tssHigh })
             .pipe(map(workout => {
                 return workout;
             }));
