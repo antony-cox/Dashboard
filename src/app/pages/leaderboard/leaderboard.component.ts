@@ -82,7 +82,8 @@ export class LeaderboardComponent implements OnInit {
         this.leaderboardService.get()
         .pipe(first())
         .subscribe(lb => {
-            this.data = lb;
+            this.leaderboardRefreshed = lb.refreshDate;
+            this.data = lb.leaderboard;
             this.data.forEach(d => {
                 this.years.push(d.year);
             });
@@ -91,15 +92,6 @@ export class LeaderboardComponent implements OnInit {
             this.getTableData();
             this.getPodium();
             this.loading = false;
-        });
-
-        this.configService.getLeaderboardDate()
-        .pipe(first())
-        .subscribe(result => {
-            if(result != null)
-            {
-                this.leaderboardRefreshed = result;
-            }
         });
     }
 

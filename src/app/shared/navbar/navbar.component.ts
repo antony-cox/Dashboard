@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit{
     private toggleButton;
     private sidebarVisible: boolean;
     public editFtp = false;
-    private user: User;
+    public user: User;
 
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
