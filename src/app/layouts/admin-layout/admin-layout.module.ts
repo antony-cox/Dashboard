@@ -27,6 +27,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ClipboardModule } from '@angular/cdk/clipboard'
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatExpansionModule,
     ClipboardModule,
     MatDatepickerModule,
-    NgxSliderModule
+    NgxSliderModule,
+    MatPaginatorModule
   ],
   declarations: [
     DashboardComponent,

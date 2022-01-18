@@ -10,11 +10,11 @@ export class WorkoutService {
     private apiURL;
 
     constructor(private http: HttpClient, private settings: SettingsService) {
-        this.apiURL = settings.getApiURL;
+        this.apiURL = this.settings.getApiURL;
     }
 
     get(page, name, category, tssLow, tssHigh) {
-        return this.http.post<Workout[]>(this.apiURL + '/workouts', { page: page, limit: 20, name: name, category: category, tssLow: tssLow, tssHigh: tssHigh })
+        return this.http.post<any>(this.apiURL + '/workouts', { page: page, limit: 20, name: name, category: category, tssLow: tssLow, tssHigh: tssHigh })
             .pipe(map(workout => {
                 return workout;
             }));

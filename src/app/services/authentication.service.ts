@@ -15,8 +15,11 @@ export class AuthenticationService {
     constructor(private http: HttpClient, private settings: SettingsService) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
         this.currentUser = this.currentUserSubject.asObservable();
-        globalThis.ftp = this.currentUserValue.ftp;
-        globalThis.weight = this.currentUserValue.weight;
+        if(this.currentUserValue != null && this.currentUserValue != undefined)
+        {
+            globalThis.ftp = this.currentUserValue.ftp;
+            globalThis.weight = this.currentUserValue.weight;
+        }
         this.apiURL = this.settings.getApiURL;
     }
 
@@ -27,7 +30,6 @@ export class AuthenticationService {
     login(email, password) {
         return this.http.post<any>(this.apiURL + '/auth', { email, password })
             .pipe(map(user => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 this.currentUserSubject.next(user);
                 globalThis.ftp = user.ftp;
@@ -37,7 +39,6 @@ export class AuthenticationService {
     }
 
     logout() {
-        // remove user from local storage and set current user to null
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
     }

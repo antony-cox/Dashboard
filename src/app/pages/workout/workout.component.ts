@@ -9,6 +9,7 @@ import { WorkoutService } from 'app/services/workout.service';
 import { Chart, ScatterController, LinearScale, LineElement, PointElement, Filler } from 'chart.js';
 import annotationPlugin  from 'chartjs-plugin-annotation';
 import { Options } from '@angular-slider/ngx-slider';
+import { exit } from 'process';
 
 @Component({
     selector: 'workout-cmp',
@@ -20,7 +21,8 @@ export class WorkoutComponent implements OnInit{
     public user : User;
     public workouts: Workout[];
     public categories;
-    public page = 1;
+    public page = 0;
+    public totalItems = 0;
     public chartsCreated = false;
     public charts;
     public tssLow: number = 0;
@@ -77,12 +79,21 @@ export class WorkoutComponent implements OnInit{
         } 
       });
 
+      if(this.charts != undefined && this.charts.length > 0)
+      {
+        this.charts.forEach((value, key) => {
+          value.destroy();
+          this.charts.delete(key);
+        });
+      }
+
       if(this.user.permissions.includes('WORKOUT'))
       {
         this.workoutService.get(this.page, name, category, this.tssLow, this.tssHigh)
         .pipe(first())
-        .subscribe(workouts => {
-          this.setWorkouts(workouts);
+        .subscribe(result => {
+          this.totalItems = result.count;
+          this.setWorkouts(result.workouts);
         });
       }
     }
@@ -116,13 +127,11 @@ export class WorkoutComponent implements OnInit{
     {
       if(!this.chartsCreated) 
       {
-        this.workouts.forEach(w => {
+
+        for(let w of this.workouts)
+        {
           let canvas = <any> document.getElementById('chart_' + w.name);
-          if(this.charts.has(w.name))
-          {
-            this.charts.get(w.name).destroy();
-            this.charts.delete(w.name);
-          }
+
           if(canvas != null)
           {
             this.chartsCreated = true;
@@ -180,7 +189,7 @@ export class WorkoutComponent implements OnInit{
 
             this.charts.set(w.name, chart);        
           }
-        });
+        }
       }
     }
 
@@ -196,22 +205,21 @@ export class WorkoutComponent implements OnInit{
     
     onSubmit()
     {
-      this.page = 1
-      this.getWorkouts()
+      this.page = 0;
+      this.getWorkouts();
     }
 
-    movePage(x)
+    pageEvent(event)
     {
-      if(!(this.page == 1 && x == -1))
-      {
-        this.page += x;
-        this.getWorkouts()
+      if(event.pageIndex > event.previousPageIndex) this.page += 1
+      if(event.pageIndex < event.previousPageIndex) this.page -= 1
+      
+      this.getWorkouts();
         window.scroll({
           top: 0, 
           left: 0, 
           behavior: 'smooth' 
-         });
-      }
+        });
     }
 
     showNotification(style, message)

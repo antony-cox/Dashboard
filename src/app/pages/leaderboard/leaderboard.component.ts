@@ -341,7 +341,8 @@ export class LeaderboardComponent implements OnInit {
         this.leaderboardService.refresh()
         .pipe(first())
         .subscribe(lb => {
-            this.data = lb;
+            this.leaderboardRefreshed = lb.refreshDate;
+            this.data = lb.leaderboard;
             this.years = [];
             this.data.forEach(d => {
                 this.years.push(d.year);
