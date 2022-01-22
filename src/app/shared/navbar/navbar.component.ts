@@ -6,6 +6,7 @@ import { Location} from '@angular/common';
 import { AuthenticationService } from '../../services/authentication.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { User } from 'app/models/user';
+import { lightFormat } from 'date-fns';
 
 @Component({
     moduleId: module.id,
@@ -21,17 +22,16 @@ export class NavbarComponent implements OnInit{
     private sidebarVisible: boolean;
     public editFtp = false;
     public user: User;
+    public darkMode = false;
 
     public isCollapsed = true;
     @ViewChild("navbar-cmp", {static: false}) button;
 
     constructor(
       location:Location, 
-      private renderer : Renderer2, 
       private element : ElementRef, 
       private router: Router, 
-      private authSerivce: AuthenticationService,
-      private formBuilder: FormBuilder) {
+      private authSerivce: AuthenticationService) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
@@ -39,12 +39,14 @@ export class NavbarComponent implements OnInit{
 
     ngOnInit(){
       this.user = this.authSerivce.currentUserValue;
-        this.listTitles = ROUTES.filter(listTitle => listTitle);
-        var navbar : HTMLElement = this.element.nativeElement;
-        this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
-        this.router.events.subscribe((event) => {
-          this.sidebarClose();
-       });
+      this.darkMode = this.user.theme === 'dark' ? true : false;
+      this.toggleTheme();
+      this.listTitles = ROUTES.filter(listTitle => listTitle);
+      var navbar : HTMLElement = this.element.nativeElement;
+      this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
+      this.router.events.subscribe((event) => {
+        this.sidebarClose();
+      });
     }
     getTitle(){
       var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -103,6 +105,22 @@ export class NavbarComponent implements OnInit{
           navbar.classList.remove('bg-white');
         }
 
+      }
+
+      toggleTheme()
+      {
+        if(!this.darkMode)
+        {
+          this.darkMode = true;
+        } else {
+          this.darkMode = false;
+        }
+
+        document.body.classList.toggle('dark');
+        document.body.classList.toggle('light');
+
+        this.user.theme = this.darkMode ? 'dark' : 'light';
+        localStorage.setItem('currentUser', JSON.stringify(this.user));
       }
 
       logout() {

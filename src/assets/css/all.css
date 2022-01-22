@@ -16,6 +16,16 @@
   text-rendering: auto;
   line-height: 1; }
 
+.dark .fa,
+.dark .fas,
+.dark .far,
+.dark .fal,
+.dark .fad,
+.dark .fab
+{
+  color: #a3a3a3;
+}
+
 .fa-lg {
   font-size: 1.33333em;
   line-height: 0.75em;

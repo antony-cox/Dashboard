@@ -9,4 +9,5 @@
     ftp: number;
     weight: number;
     active: boolean;
+    theme: string;
 }

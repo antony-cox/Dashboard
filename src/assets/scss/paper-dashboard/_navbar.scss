@@ -1,7 +1,7 @@
 .navbar{
     padding-top: $navbar-padding-base;
     padding-bottom: $navbar-padding-base;
-    min-height: 53px;
+    min-height: 64px;
     margin-bottom: 20px;
 
     a{
@@ -216,10 +216,17 @@
         }
     }
 
+    .light &.navbar-transparent {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .dark &.navbar-transparent {
+        border-bottom: 1px solid rgba(221, 221, 221, .25);
+    }
+    
     &.navbar-transparent{
       background-color: $transparent-bg !important;
       box-shadow: none;
-      border-bottom: 1px solid #ddd;
 
       a:not(.dropdown-item):not(.btn){
         color: $default-color;

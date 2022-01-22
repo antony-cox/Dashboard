@@ -12,7 +12,7 @@ export interface RouteInfo {
 }
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/weight',        title: 'WeightTracker',     icon:'fas fa-weight',         class: '',  permission: 'WEIGHT' },
+    // { path: '/weight',        title: 'WeightTracker',     icon:'fas fa-weight',         class: '',  permission: 'WEIGHT' },
     { path: '/strava',        title: 'Strava',            icon:'fab fa-strava',         class: '',  permission: 'STRAVA' },
     { path: '/calendar',      title: 'Calendar',          icon:'far fa-calendar',       class: '',  permission: 'CALENDAR' },
     { path: '/workout',       title: 'Workouts',          icon:'fas fa-dumbbell',       class: '',  permission: 'WORKOUT' },

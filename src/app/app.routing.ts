@@ -5,7 +5,7 @@ import { AuthGuard } from './helpers/auth.guard';
 import { LeaderboardComponent } from './pages/leaderboard/leaderboard.component';
 
 export const AppRoutes: Routes = [
-  { path: '', redirectTo: 'dashboard', pathMatch: 'full', canActivate: [AuthGuard]}, 
+  { path: '', redirectTo: 'workout', pathMatch: 'full', canActivate: [AuthGuard]}, 
   { path: '', component: AdminLayoutComponent, children: [{path: '', loadChildren: './layouts/admin-layout/admin-layout.module#AdminLayoutModule'}], canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent },
   { path: 'leaderboard', component: LeaderboardComponent },

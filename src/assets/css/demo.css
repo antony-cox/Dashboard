@@ -354,8 +354,12 @@
   cursor: pointer;
 }
 
-.mat-datepicker-toggle {
-  color: #252422 !important;
+.light .mat-datepicker-toggle {
+  color: #0f0f0f !important;
+}
+
+.dark .mat-datepicker-toggle {
+  color: #a3a3a3 !important;
 }
 
 .ml20
@@ -380,4 +384,9 @@
 .tss-slider .ngx-slider .ngx-slider-pointer
 {
   background-color: #51cbce !important;
+}
+
+.ngx-slider .ngx-slider-bubble
+{
+  color: #9A9A9A !important;
 }

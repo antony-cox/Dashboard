@@ -1,8 +1,16 @@
+.light .card {
+    background-color: #FFFFFF;
+    color: $card-black-color;
+}
+
+.dark .card {
+    background-color: #323232;
+    color: #fff;
+}
+
 .card{
   border-radius: $border-radius-extreme;
   box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
-  background-color: #FFFFFF;
-  color: $card-black-color;
   margin-bottom: 20px;
   position: relative;
   border: 0 none;
