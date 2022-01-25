@@ -1,0 +1,79 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-workout">
+      <div class="row">
+        <div class="col-md-12">
+          <canvas style="padding: 20px 10px 0 10px" id="chartWorkout" width="400" height="100"></canvas>
+        </div>
+      </div>
+      <div class="card-header">
+        <h1 class="card-title" style="margin-bottom: 0px;">
+          Title
+        </h1>
+        <span *ngIf="workout.category != ''">Category: {{ workout.category }} - </span>
+        <span *ngIf="workout.duration > 0">Duration: {{ workout.duration / 60 }} mins - </span>
+        <span *ngIf="workout.tss > 0">TSS: {{ workout.tss }}</span>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <h2>Description</h2>
+            
+            <h2>Goals</h2>
+            
+          </div>
+          <div class="col-md-6">
+            <h2>Steps</h2>
+            <div class="row">
+              <div class="col-md-12">
+                <form [formGroup]="addStepForm">
+                  <div class="row">
+                    <div class="form-group col-md-3">
+                      <label>Start Power (%):</label>
+                      <input type="number" class="form-control" formControlName="startPower">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label>End Power (%):</label>
+                      <input type="number" class="form-control" formControlName="endPower">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label>Duration:</label>
+                      <input type="text" class="form-control" formControlName="duration">
+                    </div>
+                    <div class="form-group col-md-3">
+                      <button type="button" class="btn btn-primary w-100 mt-15" (click)="addStep()">
+                        <i class="fas fa-plus color-white"></i> Add
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>  
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div *ngIf="workout.data.length > 0" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                  <div class="example-box" *ngFor="let d of workout.data; let i = index;" cdkDrag>
+                    <div class="row w-100">
+                      <div class="col-md-10">
+                        {{ d.endTime - d.startTime }}s {{ d.startPower != d.endPower ? d.startPower + '% - ' + d.endPower + '%' : d.startPower + '%' }}
+                      </div>
+                      <div class="col-md-1">
+                        <i class="fas fa-edit clickable" style="color: black;" (click)="editStep(i)"></i>
+                      </div>
+                      <div class="col-md-1">
+                        <i class="fas fa-trash-alt clickable" style="color: black;" (click)="removeStep(i)"></i>
+                      </div>
+                    </div>  
+                  </div>
+                </div> 
+                <div *ngIf="workout.data.length == 0">
+                  Add step to get started.
+                </div>
+              </div> 
+            </div>   
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -13,12 +13,12 @@ export interface RouteInfo {
 
 export const ROUTES: RouteInfo[] = [
     // { path: '/weight',        title: 'WeightTracker',     icon:'fas fa-weight',         class: '',  permission: 'WEIGHT' },
-    { path: '/strava',        title: 'Strava',            icon:'fab fa-strava',         class: '',  permission: 'STRAVA' },
-    { path: '/calendar',      title: 'Calendar',          icon:'far fa-calendar',       class: '',  permission: 'CALENDAR' },
+    // { path: '/strava',        title: 'Strava',            icon:'fab fa-strava',         class: '',  permission: 'STRAVA' },
+    // { path: '/calendar',      title: 'Calendar',          icon:'far fa-calendar',       class: '',  permission: 'CALENDAR' },
     { path: '/workout',       title: 'Workouts',          icon:'fas fa-dumbbell',       class: '',  permission: 'WORKOUT' },
     { path: '/user',          title: 'Profile',           icon:'fas fa-user',           class: '',  permission: '' },
     { path: '/usermgmt',      title: 'User Management',   icon:'fas fa-users',          class: '',  permission: 'SUPERADMIN' },
-    { path: '/leaderboard',   title: 'Leaderboard',       icon:'fas fa-trophy',    class: '',  permission: '' },
+    { path: '/leaderboard',   title: 'Leaderboard',       icon:'fas fa-trophy',         class: '',  permission: '' },
 ];
 
 @Component({
@@ -32,7 +32,7 @@ export class SidebarComponent implements OnInit {
     public user: User;
 
     constructor(private authService: AuthenticationService) {
-        this.user = authService.currentUserValue;
+        this.user = this.authService.currentUserValue;
       }
 
     ngOnInit() {

@@ -7,6 +7,7 @@ import { StravaComponent } from 'app/pages/strava/strava.component';
 import { CalendarComponent } from 'app/pages/calendar/calendar.component';
 import { WorkoutComponent } from 'app/pages/workout/workout.component';
 import { WorkoutDetailComponent } from 'app/pages/workoutDetail/workoutDetail.component';
+import { AddWorkoutComponent } from 'app/pages/addWorkout/addWorkout.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -16,5 +17,6 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'usermgmt',       component: UsermgmtComponent },
     { path: 'user',           component: UserComponent },
     { path: 'workout',        component: WorkoutComponent},
-    { path: 'workout/:id',    component: WorkoutDetailComponent}
+    { path: 'workout/:id',    component: WorkoutDetailComponent},
+    { path: 'addWorkout',     component: AddWorkoutComponent}
 ];

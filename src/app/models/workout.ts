@@ -9,5 +9,9 @@ export class Workout {
     duration: number;
     tss: number;
     data: WorkoutData[];
+
+    constructor() {
+        this.data = [];
+    }
 }
 

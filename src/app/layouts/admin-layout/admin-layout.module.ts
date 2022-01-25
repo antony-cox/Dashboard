@@ -28,6 +28,9 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
 import { MatDatepickerModule } from '@angular/material/datepicker'; 
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
+import { AddWorkoutComponent } from 'app/pages/addWorkout/addWorkout.component';
+import { CdkDropList, DragDropModule } from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -48,7 +51,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ClipboardModule,
     MatDatepickerModule,
     NgxSliderModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatButtonModule,
+    DragDropModule
   ],
   declarations: [
     DashboardComponent,
@@ -63,6 +68,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     CalendarComponent,
     WorkoutComponent,
     WorkoutDetailComponent,
+    AddWorkoutComponent
   ]
 })
 
