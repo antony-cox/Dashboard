@@ -27,6 +27,8 @@ export class WorkoutComponent implements OnInit{
     public charts;
     public tssLow: number = 0;
     public tssHigh: number = 300;
+    public durationLow: number = 0;
+    public durationHigh: number = 300;
 
     workoutSearchForm = this.formBuilder.group({
       name: [''],
@@ -37,11 +39,18 @@ export class WorkoutComponent implements OnInit{
       return this.workoutSearchForm.controls.categories as FormArray;
     }
 
-    sliderMinValue: number = 0;
-    sliderMaxValue: number = 300;
-    sliderOptions: Options = {
+    tssSliderMinValue: number = 0;
+    tssSliderMaxValue: number = 300;
+    tssSliderOptions: Options = {
       floor: 0,
       ceil: 300
+    };
+
+    durationSliderMinValue: number = 0;
+    durationSliderMaxValue: number = 360;
+    durationSliderOptions: Options = {
+      floor: 0,
+      ceil: 360
     };
 
     constructor(
@@ -89,7 +98,11 @@ export class WorkoutComponent implements OnInit{
 
       if(this.user.permissions.includes('WORKOUT'))
       {
-        this.workoutService.get(this.page, name, category, this.tssLow, this.tssHigh)
+        const param = {
+          page: this.page, limit: 20, name: name, category: category, tssLow: this.tssLow, tssHigh: this.tssHigh, durationLow: this.durationLow, durationHigh: this.durationHigh
+        }
+
+        this.workoutService.get(param)
         .pipe(first())
         .subscribe(result => {
           this.totalItems = result.count;
@@ -201,6 +214,16 @@ export class WorkoutComponent implements OnInit{
     updateTssHigh(event)
     {
       this.tssHigh = event;
+    }
+
+    updateDurationLow(event)
+    {
+      this.durationLow = event;
+    }
+
+    updateDurationHigh(event)
+    {
+      this.durationHigh = event;
     }
     
     onSubmit()

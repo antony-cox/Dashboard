@@ -16,11 +16,19 @@
               </div>
             </div>
           </div>
+          <!-- Duration -->
+          <div class="row">
+            <div class="col-md-12 pr-3 slider">
+              <label>Duration (min):</label>
+              <ngx-slider [(value)]="durationSliderMinValue" [(highValue)]="durationSliderMaxValue" [options]="durationSliderOptions" 
+                (valueChange)="updateDurationLow($event)" (highValueChange)="updateDurationHigh($event)"></ngx-slider>
+            </div>
+          </div>
           <!-- TSS -->
           <div class="row">
-            <div class="col-md-12 pr-3 tss-slider">
+            <div class="col-md-12 pr-3 slider">
               <label>TSS:</label>
-              <ngx-slider [(value)]="sliderMinValue" [(highValue)]="sliderMaxValue" [options]="sliderOptions" 
+              <ngx-slider [(value)]="tssSliderMinValue" [(highValue)]="tssSliderMaxValue" [options]="tssSliderOptions" 
                 (valueChange)="updateTssLow($event)" (highValueChange)="updateTssHigh($event)"></ngx-slider>
             </div>
           </div>
@@ -83,4 +91,9 @@
       </div>
     </div>
   </div>
+</div>
+<div class="example-button-container">
+  <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
+    <mat-icon>delete</mat-icon>
+  </button>
 </div>

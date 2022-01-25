@@ -372,16 +372,21 @@
   width: 100% !important;
 }
 
-.tss-slider .ngx-slider .ngx-slider-bubble
+.slider
+{
+  margin-bottom: 5px;
+}
+
+.slider .ngx-slider .ngx-slider-bubble
 {
   font-size: 0.8571em;
 }
 
-.tss-slider .ngx-slider .ngx-slider-selection {
+.slider .ngx-slider .ngx-slider-selection {
   background:#51cbce !important;
 }
 
-.tss-slider .ngx-slider .ngx-slider-pointer
+.slider .ngx-slider .ngx-slider-pointer
 {
   background-color: #51cbce !important;
 }
